@@ -2,7 +2,7 @@
 
 ## Students working on the project:
 - Najiullah Basharat (sb2286)
-
+- Jonathan Miller (jdm454)
 ## Contents
 
 
