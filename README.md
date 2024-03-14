@@ -2,6 +2,7 @@
 
 ## Students working on the project:
 - Najiullah Basharat (sb2286)
+- Nathan Cook (ncc48)
 
 ## Contents
 
