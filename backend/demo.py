@@ -42,6 +42,8 @@ def sims(s,term_mat,good_types):
     
     *note: this function is called in the next function, top_k
     """
+    type_idx = dict(zip(good_types,np.arange(len(good_types))))
+    
     tokens = tokenize(s)
     v = np.zeros(len(good_types))
     for token in tokens:
