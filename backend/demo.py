@@ -2,17 +2,14 @@ import pandas as pd
 import numpy as np
 import re
 
-# gets the data
-df = pd.read_csv("pokematch.csv")
-
-# gets list of names of pokemons in right order
-pokemons = df.name.tolist()
+# gets the data, this is the data input in the 
+df = pd.read_json("pokematch.json")
 
 # gets matrix of terms and docs
-term_mat = pd.read_csv('td_mat.csv').values.tolist()
+term_mat = pd.read_json('td_mat.json').values.tolist()
 
 # gets list of good types. idk why the 0 is there, it just adds it.
-good_types = pd.read_csv('goodtypes.csv')['0'].tolist()
+good_types = pd.read_json('goodtypes.json')['0'].tolist()
 
 #--------------- Functions ------------------------------
 
@@ -55,7 +52,7 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
-def top_k(s,term_mat,good_types,k,pokemons):
+def top_k(s,term_mat,good_types,k,data):
     """
     gives top k pokemons related to given string s, in decending order
 
@@ -64,7 +61,7 @@ def top_k(s,term_mat,good_types,k,pokemons):
     term_mat: matrix of term frequencies, # of pokemons x # of good types
     good_types: list of good_types
     k: top k documents to be returned
-    pokemons: list of pokemon names
+    data: dataframe with the names and descriptions (see code above for getting this)
 
     returns:
     list of k tuples. each tuple is (pokemon_name: string, similarity: float i think)
@@ -72,4 +69,5 @@ def top_k(s,term_mat,good_types,k,pokemons):
     """
     cosines = sims(s, term_mat, good_types)
     ranks = np.argsort(cosines)[-k:][::-1]
-    return[(pokemons[r],cosines[r]) for r in ranks]
+    ranked = [(data.name[r],data.description[r]) for r in ranks]
+    return pd.DataFrame(data=ranked,columns=['name','desc']).to_json()
