@@ -5,6 +5,7 @@
 - Jonathan Miller (jdm454)
 - Nathan Cook (ncc48)
 - Zakir Ahmad (zba6)
+- Vishu Agarwal (va243)
 ## Contents
 
 
