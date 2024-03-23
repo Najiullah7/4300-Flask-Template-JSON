@@ -2,15 +2,6 @@ import pandas as pd
 import numpy as np
 import re
 
-# gets the data, this is the data input in the 
-df = pd.read_json("pokematch.json")
-
-# gets matrix of terms and docs
-term_mat = pd.read_json('td_mat.json').values.tolist()
-
-# gets list of good types. idk why the 0 is there, it just adds it.
-good_types = pd.read_json('goodtypes.json')['0'].tolist()
-
 #--------------- Functions ------------------------------
 
 def tokenize(s):
@@ -64,10 +55,10 @@ def top_k(s,term_mat,good_types,k,data):
     data: dataframe with the names and descriptions (see code above for getting this)
 
     returns:
-    list of k tuples. each tuple is (pokemon_name: string, similarity: float i think)
+    list of k tuples. each tuple is (pokemon_name: string, desc: description)
     
     """
     cosines = sims(s, term_mat, good_types)
     ranks = np.argsort(cosines)[-k:][::-1]
     ranked = [(data.name[r],data.description[r]) for r in ranks]
-    return pd.DataFrame(data=ranked,columns=['name','desc']).to_json()
+    return pd.DataFrame(data=ranked,columns=['name','desc'])
