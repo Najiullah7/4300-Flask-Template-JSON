@@ -11,9 +11,10 @@
                 <h1 id="google-1">Poke</h1>
                 <h1 id="google-0-2">Match</h1>
             </div>
-            <div class="input-box" onclick="sendFocus()">
+            <div class="input-box">
                 <img src="{{ url_for('static', filename='images/mag.png') }}" />
-                <input placeholder="Search for a Keeping up with the Kardashians episode" id="filter-text-val" onkeyup="filterText()">
+                <textarea placeholder="Enter a description about yourself" id="filter-text-val"></textarea>
+                <button onclick="submitSearch()">Submit</button>
             </div>
         </div>
         <div id="answer-box">
@@ -23,9 +24,15 @@
 
     <script>
 
-        function answerBoxTemplate(pokemname,pokeDesc, pokemname){
+        function submitSearch() {
+            var filterTextVal = document.getElementById('filter-text-val').value;
+            filterText(filterTextVal);
+        }
+        
+        function answerBoxTemplate(pokemname,pokeDesc){
+            filename = '/static/images/PokemonImages/' + pokemname + '.png';
             return `<div class=''>
-                <img src="{{ url_for('static', filename='images/PokemonImages/${pokemname}.png') }}" />
+                <img src="${filename}" width="100" height="100"/>
                 <h3 class='episode-title'>${pokemname}</h3>
                 <p class='episode-desc'>${pokeDesc}</p>
             </div>`
