@@ -1,94 +1,215 @@
-.full-page{
-    background-image: url('images/CharmanderBackground.png');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-.full-body-container{
-    position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    width:100%;
-    height:100%;
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 20px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.full-page {
     display: flex;
-    justify-content: start;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#google-c{
-    color:#4285F4;
+.full-body-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
 }
 
-#google-s{
-    color:#DB4437;
+.top-text {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-#google-4{
-    color:	#F4B400;
+.google-colors {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+#google-1 {
+    color: #EA4335; /* Google red */
+    font-weight: bold;
+    font-size: 2em;
+}
+#google {
+    font-weight: bold;
+    font-size: 2em;
+    color: #4285F4; /* This sets the color to Google blue; adjust if you want a different color */
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-#google-3{
-    color:	#4285F4;
+#google-0-2 {
+    color: #4285F4; /* Blue */
 }
 
-#google-0-1{
-    color:	#0F9D58;
-}
-
-#google-0-2{
-    color:#DB4437;
-}
-
-.google-colors{
+.input-box {
     display: flex;
     align-items: center;
-    font-size: 48px;
+    gap: 10px;
+}
+
+.input-box img {
+    width: 24px;
+    height: 24px;
+}
+
+.input-box textarea {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
     font-family: 'Open Sans', sans-serif;
 }
 
-.google-colors h1{
-    margin-bottom: 0;
-    margin-right: 3px;
-}
-
-.input-box{
-    border-radius: 50px;
-    border:1px solid black;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    padding:12px;
-    width: 600px;
-}
-
-.input-box img{
-    height: 20px;
-    width:20px;
-}
-
-.top-text{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.input-box input{
-    width: 100%;
-    margin-left: 10px;
-    font-size: 16px;
+.input-box button {
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    outline: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
-#answer-box{
-    width: 700px;
-    margin-top:50px; 
+.input-box button:hover {
+    background-color: #45a049;
 }
 
-.episode-title{
-    font-family: 'Kanit', sans-serif;
+#answer-box {
+    margin-top: 20px;
 }
 
-.episode-desc{
-    font-family: 'Montserrat', sans-serif;
+#answer-box>div {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.episode-title {
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
+}
+
+.episode-desc {
+    font-size: 0.9em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .full-body-container {
+        width: 90%;
+    }
+
+    .input-box textarea,
+    .input-box button {
+        width: 100%;
+        display: block;
+    }
+
+    .input-box {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+.poke {
+    color: #EA4335; 
+}
+
+.match {
+    color: #4285F4; 
+}
+
+#answer-box>div {
+    transition: transform 0.3s ease; 
+    cursor: pointer; 
+}
+
+#answer-box>div:hover {
+    transform: scale(1.1); 
+    z-index: 10;
+}
+
+
+.episode-title {
+    font-size: 1.4em; 
+    margin-bottom: 0.25em; 
+}
+
+.episode-desc {
+    font-size: 0.95em;
+    line-height: 1.4em; 
+    color: #555; 
+}
+
+.input-box input {
+    border-radius: 22px; 
+    padding: 12px 20px;
+    font-size: 1em; 
+}
+
+.input-box button {
+    border-radius: 22px;
+    padding: 12px 20px; 
+    font-size: 1em; 
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+#answer-box>div {
+    border-radius: 8px; 
+    padding: 20px; 
+    transition: box-shadow 0.2s; 
+}
+
+#answer-box>div:hover {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); 
+    transform: translateY(-2px); 
+}
+
+
+
+
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    top: 10px; 
+    width: 50px; 
+    height: 50px; 
+    background: url('/Users/VishuAgarwal/code-repo/4300-Flask-Template-JSON/backend/static/pokeball.png') no-repeat center center;
+    background-size: contain
+    z-index: 1000;
+}
+
+body::before {
+    left: 10px; 
+}
+
+body::after {
+    right: 10px; 
 }
