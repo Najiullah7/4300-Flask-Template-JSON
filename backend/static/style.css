@@ -1,94 +1,132 @@
-.full-page{
-    background-image: url('images/CharmanderBackground.png');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-.full-body-container{
-    position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    width:100%;
-    height:100%;
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 20px;
+}
+
+.full-page {
     display: flex;
-    justify-content: start;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#google-c{
-    color:#4285F4;
+.full-body-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
 }
 
-#google-s{
-    color:#DB4437;
+.top-text {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-#google-4{
-    color:	#F4B400;
+.google-colors {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-#google-3{
-    color:	#4285F4;
+#google-1,
+#google-0-2 {
+    font-weight: bold;
+    font-size: 2em;
 }
 
-#google-0-1{
-    color:	#0F9D58;
+#google-1 {
+    color: #4285F4;
+    /* Google blue */
 }
 
-#google-0-2{
-    color:#DB4437;
+#google-0-2 {
+    color: #EA4335;
+    /* Google red */
 }
 
-.google-colors{
+.input-box {
     display: flex;
     align-items: center;
-    font-size: 48px;
+    gap: 10px;
+}
+
+.input-box img {
+    width: 24px;
+    height: 24px;
+}
+
+.input-box textarea {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
     font-family: 'Open Sans', sans-serif;
 }
 
-.google-colors h1{
-    margin-bottom: 0;
-    margin-right: 3px;
-}
-
-.input-box{
-    border-radius: 50px;
-    border:1px solid black;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    padding:12px;
-    width: 600px;
-}
-
-.input-box img{
-    height: 20px;
-    width:20px;
-}
-
-.top-text{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.input-box input{
-    width: 100%;
-    margin-left: 10px;
-    font-size: 16px;
+.input-box button {
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    outline: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
-#answer-box{
-    width: 700px;
-    margin-top:50px; 
+.input-box button:hover {
+    background-color: #45a049;
 }
 
-.episode-title{
-    font-family: 'Kanit', sans-serif;
+#answer-box {
+    margin-top: 20px;
 }
 
-.episode-desc{
-    font-family: 'Montserrat', sans-serif;
+#answer-box>div {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.episode-title {
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
+}
+
+.episode-desc {
+    font-size: 0.9em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .full-body-container {
+        width: 90%;
+    }
+
+    .input-box textarea,
+    .input-box button {
+        width: 100%;
+        display: block;
+    }
+
+    .input-box {
+        flex-direction: column;
+        gap: 5px;
+    }
 }
