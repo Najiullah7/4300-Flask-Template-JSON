@@ -60,5 +60,33 @@ def top_k(s,term_mat,good_types,k,data):
     """
     cosines = sims(s, term_mat, good_types)
     ranks = np.argsort(cosines)[-k:][::-1]
-    ranked = [(data.name[r],data.description[r]) for r in ranks]
+    ranked = []
+    for r in ranks:
+        name = data.name[r]
+        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
+        ranked.append((name, descs))
+    return pd.DataFrame(data=ranked,columns=['name','desc'])
+
+def bottom_k(s,term_mat,good_types,k,data):
+    """
+    gives top k pokemons related to given string s, in decending order
+
+    arguments:
+    s: string that is being compared to pokemons
+    term_mat: matrix of term frequencies, # of pokemons x # of good types
+    good_types: list of good_types
+    k: top k documents to be returned
+    data: dataframe with the names and descriptions (see code above for getting this)
+
+    returns:
+    list of k tuples. each tuple is (pokemon_name: string, desc: description)
+    
+    """
+    cosines = sims(s, term_mat, good_types)
+    ranks = np.argsort(cosines)[-k:]
+    ranked = []
+    for r in ranks:
+        name = data.name[r]
+        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
+        ranked.append((name, descs))
     return pd.DataFrame(data=ranked,columns=['name','desc'])
