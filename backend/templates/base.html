@@ -1,9 +1,11 @@
-<!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Flaskr</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body class="full-page">
     <div class="full-body-container">
         <div class="top-text">
@@ -14,43 +16,111 @@
             <textarea placeholder="Enter a description about yourself" id="filter-text-val"></textarea>
             <button onclick="submitSearch()">Submit</button>
         </div>
-        <div id="answer-box">
-        <div id="answer-box">
-
+        <div class="boxcontainer" id="boxcontainer">
+            <div id="box1" class="box"></div>
+            <div id="box2" class="box"></div>
+            <div id="box3" class="box"></div>
+            <div id="box4" class="box"></div>
+            <div id="box5" class="box"></div>
+            <div id="box6" class="box"></div>
         </div>
     </div>
 
     <script>
-
         function submitSearch() {
             var filterTextVal = document.getElementById('filter-text-val').value;
             filterText(filterTextVal);
         }
         
-        function answerBoxTemplate(pokemname,pokeDesc){
-            filename = '/static/images/PokemonImages/' + pokemname + '.png';
-            return `<div class=''>
-                <img src="${filename}" width="100" height="100"/>
-                <h3 class='episode-title'>${pokemname}</h3>
-                <p class='episode-desc'>${pokeDesc}</p>
-            </div>`
+        function answerBoxTemplate(pokemname, pokeDesc, pokepop) {
+            let filename = '/static/images/Pokemon_sprites_Gen1-8/' + pokemname + '.png';
+            return `<div class="container" onclick="generatePokemonPage(&quot;${pokemname}&quot;, &quot;${pokeDesc}&quot;, &quot;${pokepop}&quot;)" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
+                        <!-- Image to hover over -->
+                        <img class="trigger-image" src="/static/images/pokemon_background.png">
+
+                        <!-- Image to fade into -->
+                        <img class="fade-image" src="/static/images/selected_pokemon_background.png">
+
+                        <!-- Image to move down -->
+                        <img class="move-image" src="/static/images/Pokeball_top_unselected.png">
+
+                        <img class="pokemon_sprite" src="${filename}">
+                        <text class="pokemon_name">${pokemname}</text>
+                    </div>`;
+        }
+
+        function handleMouseEnter(element) {
+            const fadeImage = element.querySelector('.fade-image');
+            const moveImage = element.querySelector('.move-image');
+
+            fadeImage.style.opacity = '1';
+            moveImage.style.top = '4px';
+        }
+
+        function handleMouseLeave(element) {
+            const fadeImage = element.querySelector('.fade-image');
+            const moveImage = element.querySelector('.move-image');
+
+            fadeImage.style.opacity = '0';
+            moveImage.style.top = '16px'; 
         }
 
         function sendFocus(){
             document.getElementById('filter-text-val').focus()
         }
 
-        function filterText(){
-            document.getElementById("answer-box").innerHTML = ""
+        function filterText() {
+            let i = 1;
             console.log(document.getElementById("filter-text-val").value)
             fetch("/pokemon?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
             .then((response) => response.json())
-            .then((data) => data.forEach(row => {
-                
-                let tempDiv = document.createElement("div")
-                tempDiv.innerHTML = answerBoxTemplate(row.name,row.desc)
-                document.getElementById("answer-box").appendChild(tempDiv)
-            }));
+            .then((data) => {
+                sessionStorage.setItem('pokemonData', JSON.stringify(data));
+                data.forEach(row => {
+                    let targetBoxId = "box" + i;
+                    let targetBox = document.getElementById(targetBoxId);
+                    if (targetBox){
+                        targetBox.innerHTML = ""
+                        let tempDiv = document.createElement("div")
+                        tempDiv.innerHTML = answerBoxTemplate(row.name,row.desc, row.pop)
+                        targetBox.appendChild(tempDiv)
+                        i += 1
+                    }
+                });
+            });
+        }
+
+        function generatePokemonPage(name, desc, pop) {
+            let filename = '/static/images/PokemonImages/' + name + '.png';
+            const pokemonPageContent = `
+                <body>
+                    <img class="pokemon_image" src="${filename}" width = "100" height = "100">
+                    <h1>${name}</h1>
+                    <p>${desc}</p>
+                    <p>Popularity: ${pop}</p>
+                    <button onclick="window.location.href = ''; return false;">Back to Index</button>
+                </body>
+            `;
+            document.write(pokemonPageContent);
+        }
+
+        window.onload = function() {
+            let storedData = sessionStorage.getItem('pokemonData');
+            if (storedData) {
+                let data = JSON.parse(storedData);
+                let i = 1;
+                data.forEach(row => {
+                    let targetBoxId = "box" + i;
+                    let targetBox = document.getElementById(targetBoxId);
+                    if (targetBox){
+                        let tempDiv = document.createElement("div")
+                        tempDiv.innerHTML = answerBoxTemplate(row.name,row.desc, row.pop)
+                        targetBox.appendChild(tempDiv)
+                        i += 1
+                    }
+                });
+            }
         }
     </script>
 </body>
+</html>
