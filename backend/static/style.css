@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Kode+Mono&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -37,29 +39,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.google-colors {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-#google-1 {
-    color: #EA4335; /* Google red */
-    font-weight: bold;
-    font-size: 2em;
-}
-#google {
-    font-weight: bold;
-    font-size: 2em;
-    color: #4285F4; /* This sets the color to Google blue; adjust if you want a different color */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-#google-0-2 {
-    color: #4285F4; /* Blue */
-}
-
+/* ----------- input box ------------ */
 .input-box {
     display: flex;
     align-items: center;
@@ -93,30 +73,22 @@ h1 {
     background-color: #45a049;
 }
 
-#answer-box {
-    margin-top: 20px;
+/* ------- Each pokemon displayed features -------- */
+
+.pokemon-name {
+    font-size: 1.4em; 
+    margin-bottom: 0.25em; 
 }
 
-#answer-box>div {
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.pokemon-desc {
+    font-size: 0.9 em;
+    line-height: 1.4em; 
+    color: #555; 
 }
 
-.episode-title {
-    font-size: 1.2em;
-    margin: 0;
-    color: #333;
-}
-
-.episode-desc {
-    font-size: 0.9em;
-    color: #666;
+.pokemon-pop{
+    font-size: 1.0 em;
+    color: #7e8410c9;
 }
 
 @media (max-width: 768px) {
@@ -144,72 +116,80 @@ h1 {
     color: #4285F4; 
 }
 
-#answer-box>div {
-    transition: transform 0.3s ease; 
-    cursor: pointer; 
+
+.boxcontainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px; /* Adjust the gap between the boxes */
+    padding: 20px;
 }
-
-#answer-box>div:hover {
-    transform: scale(1.1); 
-    z-index: 10;
-}
-
-
-.episode-title {
-    font-size: 1.4em; 
-    margin-bottom: 0.25em; 
-}
-
-.episode-desc {
-    font-size: 0.95em;
-    line-height: 1.4em; 
-    color: #555; 
-}
-
-.input-box input {
-    border-radius: 22px; 
-    padding: 12px 20px;
-    font-size: 1em; 
-}
-
-.input-box button {
-    border-radius: 22px;
-    padding: 12px 20px; 
-    font-size: 1em; 
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
-}
-
-#answer-box>div {
-    border-radius: 8px; 
-    padding: 20px; 
-    transition: box-shadow 0.2s; 
-}
-
-#answer-box>div:hover {
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); 
-    transform: translateY(-2px); 
+.box {
+    background-color: transparent; /* Set background to transparent */
+    padding: 20px;
+    text-align: center;
+    overflow: auto; /* Use auto instead of scroll to only show scrollbar when needed */
+    line-height: 50px;
+    transition: box-shadow 0.2s;
+    display: inline-block; /* Make each box inline-block to adjust size based on contents */
+    vertical-align: top; /* Align boxes to the top */
+    border: none; /* Remove border if present */
 }
 
 
+/* ------- For each green selection box -------- */
 
 
-
-body::before,
-body::after {
-    content: "";
-    position: fixed;
-    top: 10px; 
-    width: 50px; 
-    height: 50px; 
-    background: url('/Users/VishuAgarwal/code-repo/4300-Flask-Template-JSON/backend/static/pokeball.png') no-repeat center center;
-    background-size: contain
-    z-index: 1000;
+/* Style for the container and images */
+.container {
+  position: relative;
+  width: 250px;
+  height: 100px;
+  padding: 20px;
+  /* Adjust container width as needed */
+  float: left;
+  /* Arrange containers side by side */
+  margin-right: 20px;
+  /* Add some spacing between containers */
 }
 
-body::before {
-    left: 10px; 
+.trigger-image {
+  position: absolute;
+  top: 10;
+  left: 0;
+  transition: opacity 0.3s ease;
+  /* Smooth transition for opacity */
 }
 
-body::after {
-    right: 10px; 
+.fade-image {
+  position: absolute;
+  top: 10;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* Smooth transition for opacity */
+}
+
+.move-image {
+  position: absolute;
+  top: 16px;
+  /* Initial position */
+  left: 5px;
+  transition: top 0.3s ease;
+  /* Smooth transition for vertical movement */
+}
+
+.pokemon_sprite {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  scale: 1.5;
+}
+
+.pokemon_name {
+  position: absolute;
+  top: 35px;
+  left: 80px;
+  color: aliceblue;
+  font-size: 12;
+  font-family: "Kode Mono";
 }
