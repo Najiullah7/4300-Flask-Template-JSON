@@ -10,6 +10,19 @@ import re
 # gets the data
 df = pd.read_csv("pokematch.csv")
 
+documents = df.description
+td_matrix = vectorizer.fit_transform(documents)
+
+word_to_index = vectorizer.vocabulary_
+index_to_word = {i:t for t,i in word_to_index.items()}
+feature_names = vectorizer.get_feature_names_out()
+
+docs_compressed, s, words_compressed = svds(td_matrix, k=40)
+docs_compressed_normed = normalize(docs_compressed)
+
+words_compressed = words_compressed.transpose()
+words_compressed_normed = normalize(words_compressed, axis = 1)
+
 # gets matrix of terms and docs
 term_mat = pd.read_csv('td_mat.csv').values.tolist()
 
