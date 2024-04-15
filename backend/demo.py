@@ -65,7 +65,15 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, k = 10):
         if name.lower() in fav_pokemon:
             pop = fav_pokemon[name.lower()]
         ranked.append((name, descs, pop))
-    return pd.DataFrame(data=ranked,columns=['name','desc', 'pop'])
+        
+    asort = np.argsort(-query_vec)
+    top_traits = []
+    for x in asort[:5]:
+        dimension_col = np.argsort(-words_compressed[:,x].squeeze())[:3]
+        top_traits.append([index_to_word[i] for i in dimension_col])
+        
+    return pd.DataFrame(data=ranked,columns=['name','desc', 'pop']),np.array(top_traits).flatten()
+    
     
 def top_k(s,term_mat,good_types,k,data):
     """
