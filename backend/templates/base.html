@@ -19,6 +19,7 @@
             <textarea placeholder="Enter a description about yourself" id="filter-text-val"></textarea>
             <button onclick="submitSearch()">Submit</button>
         </div>
+        <div id ="svd-list"> The Top Related Words: </div>
         <div class="boxcontainer" id="boxcontainer">
             <div id="box1" class="box"></div>
             <div id="box2" class="box"></div>
@@ -72,6 +73,15 @@
             document.getElementById('filter-text-val').focus()
         }
 
+        function displayWord(item, index){
+            let targetLocation = document.getElementById("svd-list");
+            const pokemonPageContent = `${item}`;
+            console.log(item);
+            let tempDiv = document.createElement("li");
+            tempDiv.innerHTML = pokemonPageContent
+            targetLocation.appendChild(tempDiv);
+        }
+
         function filterText() {
             let i = 1;
             console.log(document.getElementById("filter-text-val").value)
@@ -91,6 +101,13 @@
                     }
                 });
             });
+            fetch("/topwords?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
+            .then(response => response.json()) // Assuming the response is in JSON format
+            .then(data => {
+                word_list = data.substring(1, data.length - 1).split(",");
+                console.log(word_list)
+                word_list.forEach(displayWord) 
+            })
         }
 
         function generatePokemonPage(name, desc, pop) {
