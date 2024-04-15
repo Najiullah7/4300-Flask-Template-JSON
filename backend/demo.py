@@ -43,6 +43,23 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
+def svd_top_k(query,  k = 10):
+    query_tfidf = vectorizer.transform([query]).toarray()
+    query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+    
+    sims = docs_compressed_normed.dot(query_vec)
+    ranks = np.argsort(-sims)[:k+1]
+    
+    ranked = []
+    for r in ranks:
+        name = df.name[r]
+        descs = ". ".join(set(df.description[r][:-1].split(". "))) + "."[:2]
+        pop = -1
+        if name.lower() in fav_pokemon:
+            pop = fav_pokemon[name.lower()]
+        ranked.append((name, descs, pop))
+    return pd.DataFrame(data=ranked,columns=['name','desc', 'pop'])
+    
 def top_k(s,term_mat,good_types,k,data):
     """
     gives top k pokemons related to given string s, in decending order
