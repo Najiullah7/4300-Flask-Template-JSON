@@ -4,12 +4,17 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import normalize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.sparse.linalg import svds
 import demo
 import re
 
 # gets the data
 df = pd.read_csv("pokematch.csv")
 
+vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8)
 documents = df.description
 td_matrix = vectorizer.fit_transform(documents)
 
