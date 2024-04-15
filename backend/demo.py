@@ -46,7 +46,7 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
-def svd_top_k(query, vectorizer, words, docs_normed  k = 10):
+def svd_top_k(df, query, vectorizer, words, docs_normed,  k = 10):
     """
     vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
     docs_normed is first svd output normalized.
