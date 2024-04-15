@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from helpers.MySQLDatabaseHandler import MySQLDatabaseHandler
 import pandas as pd
@@ -10,7 +10,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse.linalg import svds
 import demo
 import re
+from json import JSONEncoder
 
+# Got this from https://pynative.com/python-serialize-numpy-ndarray-into-json
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
+    
 # gets the data
 df = pd.read_csv("pokematch.csv")
 
@@ -34,16 +42,18 @@ term_mat = pd.read_csv('td_mat.csv').values.tolist()
 # gets list of good types. idk why the 0 is there, it just adds it.
 good_types = pd.read_csv('goodtypes.csv')['0'].tolist()
 
-top_traits = []
-
 app = Flask(__name__)
 CORS(app)
 
 def json_search(query):
     k = 6
     answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
-    top_traits = top_words
     return answer.to_json(orient='records')
+
+def top_words_search(query):
+    k = 6
+    answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
+    return json.dumps(top_words, cls=NumpyArrayEncoder)
 
 @app.route("/")
 def home():
@@ -54,6 +64,11 @@ def pokemon_search():
     text = request.args.get("title")
     return json_search(text)
 
+@app.route("/topwords")
+def pokemon_list():
+    print("hiiii -------------------------")
+    text = request.args.get("title")
+    return jsonify(top_words_search(text))
 
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=5000)
