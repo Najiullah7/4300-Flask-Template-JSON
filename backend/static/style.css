@@ -31,7 +31,7 @@ h1 {
     padding: 20px;
     border-radius: 8px;
     width: 80%;
-    max-width: 600px;
+    max-width: 700px;
 }
 
 .top-text {
@@ -76,17 +76,17 @@ h1 {
 /* ------- Each pokemon displayed features -------- */
 
 .pokemon-name {
-    font-size: 1.4em; 
-    margin-bottom: 0.25em; 
+    font-size: 1.4em;
+    margin-bottom: 0.25em;
 }
 
 .pokemon-desc {
     font-size: 0.9 em;
-    line-height: 1.4em; 
-    color: #555; 
+    line-height: 1.4em;
+    color: #555;
 }
 
-.pokemon-pop{
+.pokemon-pop {
     font-size: 1.0 em;
     color: #7e8410c9;
 }
@@ -109,30 +109,38 @@ h1 {
 }
 
 .poke {
-    color: #EA4335; 
+    color: #EA4335;
 }
 
 .match {
-    color: #4285F4; 
+    color: #4285F4;
 }
 
 
 .boxcontainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px; /* Adjust the gap between the boxes */
+    grid-gap: 10px;
+    /* Adjust the gap between the boxes */
     padding: 20px;
 }
+
 .box {
-    background-color: transparent; /* Set background to transparent */
+    background-color: transparent;
+    /* Set background to transparent */
     padding: 20px;
     text-align: center;
-    overflow: auto; /* Use auto instead of scroll to only show scrollbar when needed */
+    overflow: auto;
+    width: 100%;
+    /* Use auto instead of scroll to only show scrollbar when needed */
     line-height: 50px;
     transition: box-shadow 0.2s;
-    display: inline-block; /* Make each box inline-block to adjust size based on contents */
-    vertical-align: top; /* Align boxes to the top */
-    border: none; /* Remove border if present */
+    display: inline-block;
+    /* Make each box inline-block to adjust size based on contents */
+    vertical-align: top;
+    /* Align boxes to the top */
+    border: none;
+    /* Remove border if present */
 }
 
 
@@ -141,55 +149,55 @@ h1 {
 
 /* Style for the container and images */
 .container {
-  position: relative;
-  width: 250px;
-  height: 100px;
-  padding: 20px;
-  /* Adjust container width as needed */
-  float: left;
-  /* Arrange containers side by side */
-  margin-right: 20px;
-  /* Add some spacing between containers */
+    position: relative;
+    width: 350px;
+    height: 100px;
+    padding: 20px;
+    /* Adjust container width as needed */
+    float: left;
+    /* Arrange containers side by side */
+    margin-right: 20px;
+    /* Add some spacing between containers */
 }
 
 .trigger-image {
-  position: absolute;
-  top: 10;
-  left: 0;
-  transition: opacity 0.3s ease;
-  /* Smooth transition for opacity */
+    position: absolute;
+    top: 10;
+    left: 0;
+    transition: opacity 0.3s ease;
+    /* Smooth transition for opacity */
 }
 
 .fade-image {
-  position: absolute;
-  top: 10;
-  left: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  /* Smooth transition for opacity */
+    position: absolute;
+    top: 10;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    /* Smooth transition for opacity */
 }
 
 .move-image {
-  position: absolute;
-  top: 16px;
-  /* Initial position */
-  left: 5px;
-  transition: top 0.3s ease;
-  /* Smooth transition for vertical movement */
+    position: absolute;
+    top: 16px;
+    /* Initial position */
+    left: 5px;
+    transition: top 0.3s ease;
+    /* Smooth transition for vertical movement */
 }
 
 .pokemon_sprite {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  scale: 1.5;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    scale: 1.5;
 }
 
 .pokemon_name {
-  position: absolute;
-  top: 35px;
-  left: 80px;
-  color: aliceblue;
-  font-size: 12;
-  font-family: "Kode Mono";
+    position: absolute;
+    top: 20px;
+    left: 80px;
+    color: aliceblue;
+    font-size: 12;
+    font-family: "Kode Mono";
 }
