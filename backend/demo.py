@@ -46,11 +46,15 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
-def svd_top_k(query,  k = 10):
+def svd_top_k(query, vectorizer, words, docs_normed  k = 10):
+    """
+    vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
+    docs_normed is first svd output normalized.
+    """
     query_tfidf = vectorizer.transform([query]).toarray()
-    query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+    query_vec = normalize(np.dot(query_tfidf, words)).squeeze()
     
-    sims = docs_compressed_normed.dot(query_vec)
+    sims = docs_normed.dot(query_vec)
     ranks = np.argsort(-sims)[:k+1]
     
     ranked = []
