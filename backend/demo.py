@@ -46,7 +46,7 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
-def svd_top_k(df, query, vectorizer, words, docs_normed,  k = 10):
+def svd_top_k(df, query, vectorizer, words, docs_normed, data, k = 10):
     """
     vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
     docs_normed is first svd output normalized.
@@ -59,8 +59,8 @@ def svd_top_k(df, query, vectorizer, words, docs_normed,  k = 10):
     
     ranked = []
     for r in ranks:
-        name = df.name[r]
-        descs = ". ".join(set(df.description[r][:-1].split(". "))) + "."[:2]
+        name = data.name[r]
+        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
         pop = -1
         if name.lower() in fav_pokemon:
             pop = fav_pokemon[name.lower()]
