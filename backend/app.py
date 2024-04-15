@@ -34,12 +34,15 @@ term_mat = pd.read_csv('td_mat.csv').values.tolist()
 # gets list of good types. idk why the 0 is there, it just adds it.
 good_types = pd.read_csv('goodtypes.csv')['0'].tolist()
 
+top_traits = []
+
 app = Flask(__name__)
 CORS(app)
 
 def json_search(query):
     k = 6
     answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
+    top_traits = top_words
     return answer.to_json(orient='records')
 
 @app.route("/")
