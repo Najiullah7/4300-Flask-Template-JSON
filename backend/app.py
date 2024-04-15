@@ -39,7 +39,7 @@ CORS(app)
 
 def json_search(query):
     k = 6
-    answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)[['name','desc', 'pop']]
+    answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
     return answer.to_json(orient='records')
 
 @app.route("/")
