@@ -46,7 +46,7 @@ def sims(s,term_mat,good_types):
     norm_mat = np.linalg.norm(term_mat, axis=1)
     return top/(norm_v * norm_mat)
 
-def svd_top_k(df, query, vectorizer, words, docs_normed, data, k = 10):
+def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k = 10):
     """
     vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
     docs_normed is first svd output normalized.
@@ -69,7 +69,7 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, k = 10):
     asort = np.argsort(-query_vec)
     top_traits = []
     for x in asort[:5]:
-        dimension_col = np.argsort(-words_compressed[:,x].squeeze())[:3]
+        dimension_col = np.argsort(-words[:,x].squeeze())[:3]
         top_traits.append([index_to_word[i] for i in dimension_col])
         
     return pd.DataFrame(data=ranked,columns=['name','desc', 'pop']),np.array(top_traits).flatten()
