@@ -38,9 +38,8 @@ app = Flask(__name__)
 CORS(app)
 
 def json_search(query):
-    s = query
     k = 6
-    answer = demo.top_k(s,term_mat,good_types,k,df)[['name','desc', 'pop']]
+    answer = demo.svd_top_k(query,k)[['name','desc', 'pop']]
     return answer.to_json(orient='records')
 
 @app.route("/")
