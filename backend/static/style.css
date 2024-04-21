@@ -125,6 +125,14 @@ h1 {
     padding: 20px;
 }
 
+.suggestcontainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    /* Adjust the gap between the boxes */
+    padding: 20px;
+}
+
 .box {
     background-color: transparent;
     /* Set background to transparent */
