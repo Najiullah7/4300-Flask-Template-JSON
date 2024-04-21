@@ -55,6 +55,10 @@ def top_words_search(query):
     answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
     return json.dumps(top_words, cls=NumpyArrayEncoder)
 
+def fav_poke_position(query, fav_name):
+    rank = demo.fav_rank(df, query,vectorizer,words_compressed,docs_compressed_normed,df,fav_name)
+    return jsonify(rank)
+
 @app.route("/")
 def home():
     return render_template('base.html',title="sample html")
@@ -66,9 +70,21 @@ def pokemon_search():
 
 @app.route("/topwords")
 def pokemon_list():
-    print("hiiii -------------------------")
     text = request.args.get("title")
     return jsonify(top_words_search(text))
+
+@app.route('/pokemonRanking', methods=['GET'])
+def pokemon_ranking():
+    text = request.args.get("title")
+    input_term = request.args.get('input')
+    return fav_poke_position(text, input_term)
+
+@app.route('/pokemonSuggestions', methods=['GET'])
+def pokemon_suggestions():
+    print(df['name'])
+    search_term = request.args.get('search', '').lower()
+    suggestions = [pokemon for pokemon in df['name'] if pokemon.lower().startswith(search_term)]
+    return jsonify(suggestions)
 
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=5000)
