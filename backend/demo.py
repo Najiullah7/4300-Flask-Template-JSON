@@ -74,7 +74,38 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
         top_traits.append([index_to_word[i] for i in dimension_col])
         
     return pd.DataFrame(data=ranked,columns=['name','desc', 'pop']),np.array(top_traits).flatten()
+
+def fav_rank(df, query, vectorizer, words, docs_normed, data, fav_name):
+    """
+    vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
+    docs_normed is first svd output normalized.
+    """
+    query_tfidf = vectorizer.transform([query]).toarray()
+    query_vec = normalize(np.dot(query_tfidf, words)).squeeze()
     
+    sims = docs_normed.dot(query_vec)
+    ranks = np.argsort(-sims)
+    
+    ranked = []
+    rank_i = 1
+    for r in ranks:
+        name = data.name[r]
+        print(name)
+        print(fav_name)
+        if name == fav_name:
+            rank_str = str(rank_i)
+            if rank_i % 10 == 1:
+                return rank_str + "st"
+            elif rank_i % 10 == 2:
+                return rank_str + "nd"
+            elif rank_i % 10 == 3:
+                return rank_str + "rd"
+            return rank_str + "th"
+        rank_i += 1
+
+    
+        
+    return -1
     
 def top_k(s,term_mat,good_types,k,data):
     """
