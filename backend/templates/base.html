@@ -1,11 +1,26 @@
 <!doctype html>
+
 <head>
-    <title>{% block title %}{% endblock %} - 
-            Pokematch
+    <title>{% block title %}{% endblock %} -
+        Pokematch
     </title>
     <link rel="icon" href="{{ url_for('static', filename='/pokeball.png') }}" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: 'Pokefont';
+            src: url('pokemon_font.ttf') format('truetype');
+        }
+
+        .poke_desc {
+            font-family: 'Pokefont', sans-serif;
+            font-size: 25px;
+            color: black;
+            letter-spacing: 2px;
+        }
+    </style>
 </head>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <body class="full-page">
     <div class="full-body-container">
         <div class="top-text">
@@ -19,16 +34,17 @@
         <!-- Separate input for Pokémon search suggestions -->
         <div class="pokemon-search">
             Pick Your Favorite Pokemon To See How Similar It Is
-            <input type="text" id="pokemon-search" oninput="updatePokemonSuggestions(this.value)" placeholder="Search Pokémon">
+            <input type="text" id="pokemon-search" oninput="updatePokemonSuggestions(this.value)"
+                placeholder="Search Pokémon">
             <!-- Suggestions container -->
-            <div class = "suggestcontainer" id="pokemon-suggestions">
+            <div class="suggestcontainer" id="pokemon-suggestions">
 
             </div>
-            <div id = "favresult">
+            <div id="favresult">
             </div>
-        </div>   
+        </div>
 
-        <div id ="svd-list"> The Top Related Words: </div>
+        <div id="svd-list"> The Top Related Words: </div>
         <div class="boxcontainer" id="boxcontainer">
             <div id="box1" class="box"></div>
             <div id="box2" class="box"></div>
@@ -36,7 +52,7 @@
             <div id="box4" class="box"></div>
             <div id="box5" class="box"></div>
             <div id="box6" class="box"></div>
-        </div> 
+        </div>
     </div>
 
     <script>
@@ -46,10 +62,10 @@
             var favPokemon = document.getElementById('pokemon-search').value;
             favPokemonRanking(filterTextVal, favPokemon);
         }
-        
+
         function answerBoxTemplate(pokemname, pokeDesc, pokepop) {
             let filename = '/static/images/Pokemon_sprites_Gen1-8/' + pokemname.toLowerCase() + '.png';
-            if (!pokeDesc && !pokepop){
+            if (!pokeDesc && !pokepop) {
                 return `<div class="container" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
                         <!-- Image to hover over -->
                         <img class="trigger-image" src="/static/images/pokemon_background.png">
@@ -93,14 +109,14 @@
             const moveImage = element.querySelector('.move-image');
 
             fadeImage.style.opacity = '0';
-            moveImage.style.top = '16px'; 
+            moveImage.style.top = '16px';
         }
 
-        function sendFocus(){
+        function sendFocus() {
             document.getElementById('filter-text-val').focus()
         }
 
-        function displayWord(item, index){
+        function displayWord(item, index) {
             let targetLocation = document.getElementById("svd-list");
             const pokemonPageContent = `${item}`;
             console.log(item);
@@ -113,41 +129,61 @@
             let i = 1;
             console.log(document.getElementById("filter-text-val").value)
             fetch("/pokemon?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
-            .then((response) => response.json())
-            .then((data) => {
-                sessionStorage.setItem('pokemonData', JSON.stringify(data));
-                data.forEach(row => {
-                    let targetBoxId = "box" + i;
-                    let targetBox = document.getElementById(targetBoxId);
-                    if (targetBox){
-                        targetBox.innerHTML = ""
-                        let tempDiv = document.createElement("div")
-                        tempDiv.innerHTML = answerBoxTemplate(row.name,row.desc, row.pop)
-                        targetBox.appendChild(tempDiv)
-                        i += 1
-                    }
+                .then((response) => response.json())
+                .then((data) => {
+                    sessionStorage.setItem('pokemonData', JSON.stringify(data));
+                    data.forEach(row => {
+                        let targetBoxId = "box" + i;
+                        let targetBox = document.getElementById(targetBoxId);
+                        if (targetBox) {
+                            targetBox.innerHTML = ""
+                            let tempDiv = document.createElement("div")
+                            tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop)
+                            targetBox.appendChild(tempDiv)
+                            i += 1
+                        }
+                    });
                 });
-            });
             fetch("/topwords?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
-            .then(response => response.json()) // Assuming the response is in JSON format
-            .then(data => {
-                let targetLocation = document.getElementById("svd-list");
-                if (targetLocation){
-                    targetLocation.innerHTML = "";
-                }
-                word_list = data.substring(1, data.length - 1).split(",");
-                console.log(word_list)
-                word_list.forEach(displayWord) 
-            })
+                .then(response => response.json()) // Assuming the response is in JSON format
+                .then(data => {
+                    let targetLocation = document.getElementById("svd-list");
+                    if (targetLocation) {
+                        targetLocation.innerHTML = "";
+                    }
+                    word_list = data.substring(1, data.length - 1).split(",");
+                    console.log(word_list)
+                    word_list.forEach(displayWord)
+                })
         }
 
         function generatePokemonPage(name, desc, pop) {
             let filename = '/static/images/PokemonImages/' + name.toLowerCase() + '.png';
             const pokemonPageContent = `
                 <body>
-                    <img class="pokemon_image" src="${filename}" width = "100" height = "100">
-                    <h1>${name}</h1>
-                    <p>${desc}</p>
+                    <style>
+                        @font-face {
+                            font-family: 'Pokefont';
+                            src: url('/static/pokemon_font.ttf') format('truetype');
+                        }
+                        poke_name {
+                            font-family: 'Pokefont';
+                            font-size: 30px;
+                            color: black;
+                            letter-spacing: 2px;
+                            display: block;
+                        }
+                        desc {
+                            font-family: 'Pokefont';
+                            font-size: 20px;
+                            color: black;
+                            letter-spacing: 2px;
+                        }
+                    </style>
+                    <head>
+                    <img class="pokemon_image" src="${filename}" width="120" height="120">
+                    <poke_name>${name}</poke_name>
+                    <desc>${desc}</desc>
                     <p>Popularity: ${pop}</p>
                     <button onclick="window.location.href = ''; return false;">Back to Index</button>
                 </body>
@@ -155,7 +191,7 @@
             document.write(pokemonPageContent);
         }
 
-        window.onload = function() {
+        window.onload = function () {
             let storedData = sessionStorage.getItem('pokemonData');
             if (storedData) {
                 let data = JSON.parse(storedData);
@@ -163,9 +199,9 @@
                 data.forEach(row => {
                     let targetBoxId = "box" + i;
                     let targetBox = document.getElementById(targetBoxId);
-                    if (targetBox){
+                    if (targetBox) {
                         let tempDiv = document.createElement("div")
-                        tempDiv.innerHTML = answerBoxTemplate(row.name,row.desc, row.pop)
+                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop)
                         targetBox.appendChild(tempDiv)
                         i += 1
                     }
@@ -177,15 +213,15 @@
             console.log(text);
             console.log(document.getElementById("filter-text-val").value);
             const favPokemonContainer = document.getElementById('favresult');
-            fetch("/pokemonRanking?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value, input: favPokemon}).toString())
-            .then((response) => response.json())
-            .then((data) => {
-                    favPokemonContainer.innerHTML = ''; 
+            fetch("/pokemonRanking?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value, input: favPokemon }).toString())
+                .then((response) => response.json())
+                .then((data) => {
+                    favPokemonContainer.innerHTML = '';
                     favPokemonContainer.innerHTML = `<p>Your Favorite Pokémon is the ${data} most similar Pokémon to you </p>`
                     console.log(data);
                 });
         };
-        
+
 
         function updatePokemonSuggestions(input) {
             const suggestionsContainer = document.getElementById('pokemon-suggestions');
@@ -194,32 +230,33 @@
                 return;
             }
             fetch(`/pokemonSuggestions?search=${input}`)
-            .then(response => response.json())
-            .then(data => {
-                suggestionsContainer.innerHTML = ''; // Clear previous suggestions
-                if (data.length === 0) {
-                    suggestionsContainer.innerHTML = '<p>No suggestions found</p>';
-                } else {
-                    const ul = document.createElement('ul');
-                    ul.style.listStyleType = 'none'; // Remove default list styling
-                    ul.style.padding = '0'; // Remove default padding
-                    data.forEach(pokemon => {
-                        const li = document.createElement('li');
-                        li.innerHTML = answerBoxTemplate(pokemon, null, null)
-                        li.onclick = () => {
-                            document.getElementById('pokemon-search').value = pokemon; // Set input value to clicked suggestion
-                            suggestionsContainer.innerHTML = ''; // Clear suggestions after selection
-                        };
-                        ul.appendChild(li);
-                    });
-                    suggestionsContainer.appendChild(ul);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching Pokémon suggestions:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+                    if (data.length === 0) {
+                        suggestionsContainer.innerHTML = '<p>No suggestions found</p>';
+                    } else {
+                        const ul = document.createElement('ul');
+                        ul.style.listStyleType = 'none'; // Remove default list styling
+                        ul.style.padding = '0'; // Remove default padding
+                        data.forEach(pokemon => {
+                            const li = document.createElement('li');
+                            li.innerHTML = answerBoxTemplate(pokemon, null, null)
+                            li.onclick = () => {
+                                document.getElementById('pokemon-search').value = pokemon; // Set input value to clicked suggestion
+                                suggestionsContainer.innerHTML = ''; // Clear suggestions after selection
+                            };
+                            ul.appendChild(li);
+                        });
+                        suggestionsContainer.appendChild(ul);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching Pokémon suggestions:', error);
+                });
         }
 
     </script>
 </body>
+
 </html>

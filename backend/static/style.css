@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Kode+Mono&display=swap');
 
+@font-face {
+    font-family: 'Pokefont';
+    src: url('pokemon_font.ttf') format('truetype');
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -206,6 +211,7 @@ h1 {
     top: 20px;
     left: 80px;
     color: aliceblue;
-    font-size: 12;
-    font-family: "Kode Mono";
+    font-size: 25px;
+    font-family: "Pokefont";
+    letter-spacing: 2px;
 }
