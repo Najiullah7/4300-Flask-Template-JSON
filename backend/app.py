@@ -20,7 +20,7 @@ class NumpyArrayEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
     
 # gets the data
-df = pd.read_csv("pokematch.csv")
+df = pd.read_csv("pokemon_information.csv")
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8)
 documents = df.description
