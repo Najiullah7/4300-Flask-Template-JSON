@@ -24,7 +24,9 @@
 <body class="full-page">
     <div class="full-body-container">
         <div class="top-text">
-            <h1><span style="color: #EA4335;">Poké</span><span style="color: #4285F4;">Match</span></h1>
+            <h1 style="font-family: Pokefont; font-size: 60px; letter-spacing: 3px;">
+                <span style="color: #EA4335;">Poké</span><span style="color: #4285F4;">Match</span>
+            </h1>
         </div>
         <div class="input-box">
             <img src="{{ url_for('static', filename='images/mag.png') }}" />
@@ -158,6 +160,7 @@
         }
 
         function generatePokemonPage(name, desc, pop) {
+            let capitalizedName = name.toUpperCase();
             let filename = '/static/images/PokemonImages/' + name.toLowerCase() + '.png';
             const pokemonPageContent = `
                 <body>
@@ -166,26 +169,112 @@
                             font-family: 'Pokefont';
                             src: url('/static/pokemon_font.ttf') format('truetype');
                         }
+                        .container {
+                            background-image: url('/static/images/pokemon_frame.png');
+                            background-size: cover;
+                            position: relative;
+                            height: 276px;
+                            width: 276px;
+                            top: 20px;
+                        }
+                        .titlebar {
+                            background-image: url('/static/images/pokemon_title_bar.png');
+                            background-size: cover;
+                            position: absolute;
+                            top: 20px;
+                            right: 20px;
+                            height: 160px;
+                            width: 616px;
+                        }
+                        .description_box {
+                            background-image: url('/static/images/description_box.png');
+                            background-size: cover;
+                            position: relative;
+                            bottom: -75px;
+                            left: 5px;
+                            height: 360px;
+                            width: 1480px;
+                        }
+                        .text_box::-webkit-scrollbar {
+                            display: none;
+                        }
+                        .text_box{
+                            position: absolute;
+                            top: 25px;
+                            left: 120px;
+                            height: 305px;
+                            width: 1240px;
+                            overflow: auto;
+                            -ms-overflow-style: none;
+                            scrollbar-width: none;
+                        }
+                        
+                        .pokemon_image {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 80%; 
+                            height: 80%; 
+                            object-fit: cover; 
+                        }
                         poke_name {
+                            font-family: 'Pokefont';
+                            font-size: 50px;
+                            font-weight: 900;
+                            position: absolute;
+                            top: 45%;
+                            left: 55%;
+                            transform: translate(-50%, -50%);
+                            width: 80%;
+                            height: 80%;
+                            object-fit: cover;
+                            color: #606060ff;
+                            letter-spacing: 2px;
+                            display: block;
+                            text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
+                        }
+                        desc {
                             font-family: 'Pokefont';
                             font-size: 30px;
                             color: black;
                             letter-spacing: 2px;
-                            display: block;
                         }
-                        desc {
-                            font-family: 'Pokefont';
-                            font-size: 20px;
-                            color: black;
-                            letter-spacing: 2px;
+                        body {
+                            background-image: url('/static/images/background.png');
+                            background-size: cover;
                         }
-                    </style>
-                    <head>
-                    <img class="pokemon_image" src="${filename}" width="120" height="120">
-                    <poke_name>${name}</poke_name>
-                    <desc>${desc}</desc>
+
+                        .button {
+                            background: url('/static/images/back_button_unselected.png');
+                            background-size: cover;
+                            width: 186px; 
+                            height: 72px; 
+                            border: none;
+                            cursor: pointer;
+                            outline: none;
+                            display: inline-block;
+                        }
+
+                        .button:hover {
+                            background: url('/static/images/back_button_selected.png');
+                            background-size: cover;
+                        }
+
+                    </style>                    
+                    <button class="button" onclick="window.location.href = ''; return false;"></button>
+                    <div class="container">
+                        <img class="pokemon_image" src="${filename}" width="120" height="120">
+                    </div>
+                    <div class ="titlebar">                 
+                        <poke_name>${capitalizedName}</poke_name>
+                    </div>                    
                     <p>Popularity: ${pop}</p>
-                    <button onclick="window.location.href = ''; return false;">Back to Index</button>
+                    <div class ="description_box">
+                        <div class ="text_box">
+                            <desc>${desc}</desc>
+                        </div>
+                    </div>
                 </body>
             `;
             document.write(pokemonPageContent);

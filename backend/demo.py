@@ -61,8 +61,8 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
     ranked = []
     for r in ranks:
         name = data.name[r]
-        #descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
-        descs = data.description
+        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
+        #descs = data.description
         pop = "This Pokémon is not in the top 70 percent of popular Pokémon"
         if name.lower() in fav_pokemon:
             pop = fav_pokemon[name.lower()]
@@ -128,8 +128,8 @@ def top_k(s,term_mat,good_types,k,data):
     ranked = []
     for r in ranks:
         name = data.name[r]
-        #descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
-        descs = data.description
+        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
+        #descs = data.description
         pop = "This Pokémon is not in the top 70 percent of popular Pokémon"
         if name.lower() in fav_pokemon:
             pop = fav_pokemon[name.lower()]
