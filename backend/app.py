@@ -42,12 +42,6 @@ docs_compressed_normed = normalize(docs_compressed)
 words_compressed = words_compressed.transpose()
 words_compressed_normed = normalize(words_compressed, axis = 1)
 
-# gets matrix of terms and docs
-term_mat = pd.read_csv('td_mat.csv').values.tolist()
-
-# gets list of good types. idk why the 0 is there, it just adds it.
-good_types = pd.read_csv('goodtypes.csv')['0'].tolist()
-
 app = Flask(__name__)
 CORS(app)
 
