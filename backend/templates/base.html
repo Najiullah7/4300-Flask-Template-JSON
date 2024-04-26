@@ -45,18 +45,17 @@
             <div id="favresult">
             </div>
         </div>
-
-        <div id="svd-list"> The Top Related Words: </div>
-        <div class="boxcontainer" id="boxcontainer">
-            <div id="box1" class="box"></div>
-            <div id="box2" class="box"></div>
-            <div id="box3" class="box"></div>
-            <div id="box4" class="box"></div>
-            <div id="box5" class="box"></div>
-            <div id="box6" class="box"></div>
-        </div>
     </div>
-
+    <div id="svd-list"> The Top Related Words: </div>
+    <div class="boxcontainer" id="boxcontainer">
+        <div id="box1" class="box"></div>
+        <div id="box2" class="box"></div>
+        <div id="box3" class="box"></div>
+        <div id="box4" class="box"></div>
+        <div id="box5" class="box"></div>
+        <div id="box6" class="box"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     <script>
         function submitSearch() {
             var filterTextVal = document.getElementById('filter-text-val').value;
@@ -65,7 +64,7 @@
             favPokemonRanking(filterTextVal, favPokemon);
         }
 
-        function answerBoxTemplate(pokemname, pokeDesc, pokepop) {
+        function answerBoxTemplate(pokemname, pokeDesc, pokepop, top_terms) {
             let filename = '/static/images/Pokemon_sprites_Gen1-8/' + pokemname.toLowerCase() + '.png';
             if (!pokeDesc && !pokepop) {
                 return `<div class="container" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
@@ -83,7 +82,7 @@
                     </div>`;
 
             }
-            return `<div class="container" onclick="generatePokemonPage(&quot;${pokemname}&quot;, &quot;${pokeDesc}&quot;, &quot;${pokepop}&quot;)" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
+            return `<div class="container" onclick="generatePokemonPage(&quot;${pokemname}&quot;, &quot;${pokeDesc}&quot;, &quot;${pokepop}&quot;, &quot;${top_terms}&quot;)" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
                         <!-- Image to hover over -->
                         <img class="trigger-image" src="/static/images/pokemon_background.png">
 
@@ -130,6 +129,7 @@
         function filterText() {
             let i = 1;
             console.log(document.getElementById("filter-text-val").value)
+            sessionStorage.setItem('query', JSON.stringify(document.getElementById("filter-text-val").value));
             fetch("/pokemon?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
                 .then((response) => response.json())
                 .then((data) => {
@@ -140,148 +140,202 @@
                         if (targetBox) {
                             targetBox.innerHTML = ""
                             let tempDiv = document.createElement("div")
-                            tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop)
+                            // let top_terms = ""
+                            // for(const tup of row.top_terms){
+                            //     top_terms.concat(top_terms, tup[0], ",", tup[1], "|")
+                            // }
+                            tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop, row.top_terms)
                             targetBox.appendChild(tempDiv)
                             i += 1
                         }
                     });
                 });
-            fetch("/topwords?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
-                .then(response => response.json()) // Assuming the response is in JSON format
-                .then(data => {
-                    let targetLocation = document.getElementById("svd-list");
-                    if (targetLocation) {
-                        targetLocation.innerHTML = "";
-                    }
-                    word_list = data.substring(1, data.length - 1).split(",");
-                    console.log(word_list)
-                    word_list.forEach(displayWord)
-                })
         }
 
-        function generatePokemonPage(name, desc, pop) {
+        function generatePokemonPage(name, desc, pop, top_terms_scores) {
             let capitalizedName = name.toUpperCase();
             let filename = '/static/images/PokemonImages/' + name.toLowerCase() + '.png';
+
+            console.log(top_terms_scores)
+
+            let word_list = top_terms_scores.split(",")
+
+            console.log(word_list)
+
+
+            var labels = []
+            var datapts = []
+
+            for (let i = 0; i < word_list.length - 1; i+= 2) {
+                // Do something at index i
+                labels.push(word_list[i])
+
+                // Do something else at index i + 1
+                datapts.push(word_list[i + 1] * 100)
+            }     
+
+            console.log(datapts)
+
             const pokemonPageContent = `
-                <body>
-                    <style>
-                        @font-face {
-                            font-family: 'Pokefont';
-                            src: url('/static/pokemon_font.ttf') format('truetype');
-                        }
-                        .container {
-                            background-image: url('/static/images/pokemon_frame.png');
-                            background-size: cover;
-                            position: relative;
-                            height: 276px;
-                            width: 276px;
-                            top: 20px;
-                        }
-                        .titlebar {
-                            background-image: url('/static/images/pokemon_title_bar.png');
-                            background-size: cover;
-                            position: absolute;
-                            top: 20px;
-                            right: 20px;
-                            height: 160px;
-                            width: 616px;
-                        }
-                        .description_box {
-                            background-image: url('/static/images/description_box.png');
-                            background-size: cover;
-                            position: relative;
-                            bottom: -75px;
-                            left: 5px;
-                            height: 360px;
-                            width: 1480px;
-                        }
-                        .text_box::-webkit-scrollbar {
-                            display: none;
-                        }
-                        .text_box{
-                            position: absolute;
-                            top: 25px;
-                            left: 120px;
-                            height: 305px;
-                            width: 1240px;
-                            overflow: auto;
-                            -ms-overflow-style: none;
-                            scrollbar-width: none;
-                        }
-                        
-                        .pokemon_image {
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            width: 80%; 
-                            height: 80%; 
-                            object-fit: cover; 
-                        }
-                        poke_name {
-                            font-family: 'Pokefont';
-                            font-size: 50px;
-                            font-weight: 900;
-                            position: absolute;
-                            top: 45%;
-                            left: 55%;
-                            transform: translate(-50%, -50%);
-                            width: 80%;
-                            height: 80%;
-                            object-fit: cover;
-                            color: #606060ff;
-                            letter-spacing: 2px;
-                            display: block;
-                            text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
-                        }
-                        desc {
-                            font-family: 'Pokefont';
-                            font-size: 30px;
-                            color: black;
-                            letter-spacing: 2px;
-                        }
-                        body {
-                            background-image: url('/static/images/background.png');
-                            background-size: cover;
-                        }
+            <body>
+                <style>
+                    @font-face {
+                        font-family: 'Pokefont';
+                        src: url('/static/pokemon_font.ttf') format('truetype');
+                    }
+                    .container {
+                        background-image: url('/static/images/pokemon_frame.png');
+                        background-size: cover;
+                        position: relative;
+                        height: 276px;
+                        width: 276px;
+                        top: 20px;
+                    }
+                    .titlebar {
+                        background-image: url('/static/images/pokemon_title_bar.png');
+                        background-size: cover;
+                        position: absolute;
+                        top: 20px;
+                        right: 20px;
+                        height: 160px;
+                        width: 616px;
+                    }
+                    .description_box {
+                        background-image: url('/static/images/description_box.png');
+                        background-size: cover;
+                        position: relative;
+                        bottom: -75px;
+                        left: 5px;
+                        height: 360px;
+                        width: 1480px;
+                    }
+                    .text_box::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .text_box {
+                        position: absolute;
+                        top: 25px;
+                        left: 120px;
+                        height: 305px;
+                        width: 1240px;
+                        overflow: auto;
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                    }
+                    
+                    .pokemon_image {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 80%;
+                        height: 80%;
+                        object-fit: cover;
+                    }
+                    poke_name {
+                        font-family: 'Pokefont';
+                        font-size: 50px;
+                        font-weight: 900;
+                        position: absolute;
+                        top: 45%;
+                        left: 55%;
+                        transform: translate(-50%, -50%);
+                        width: 80%;
+                        height: 80%;
+                        object-fit: cover;
+                        color: #606060ff;
+                        letter-spacing: 2px;
+                        display: block;
+                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
+                    }
+                    desc {
+                        font-family: 'Pokefont';
+                        font-size: 30px;
+                        color: black;
+                        letter-spacing: 2px;
+                    }
+                    body {
+                        background-image: url('/static/images/background.png');
+                        background-size: cover;
+                    }
 
-                        .button {
-                            background: url('/static/images/back_button_unselected.png');
-                            background-size: cover;
-                            width: 186px; 
-                            height: 72px; 
-                            border: none;
-                            cursor: pointer;
-                            outline: none;
-                            display: inline-block;
-                        }
+                    .button {
+                        background: url('/static/images/back_button_unselected.png');
+                        background-size: cover;
+                        width: 186px; 
+                        height: 72px; 
+                        border: none;
+                        cursor: pointer;
+                        outline: none;
+                        display: inline-block;
+                    }
 
-                        .button:hover {
-                            background: url('/static/images/back_button_selected.png');
-                            background-size: cover;
-                        }
+                    .button:hover {
+                        background: url('/static/images/back_button_selected.png');
+                        background-size: cover;
+                    }
 
-                    </style>                    
-                    <button class="button" onclick="window.location.href = ''; return false;"></button>
-                    <div class="container">
-                        <img class="pokemon_image" src="${filename}" width="120" height="120">
+                    .chart{
+                        transform: translateX(50%); 
+                        transform: translateY(26%); 
+                        width: 300px; 
+                        height: 300px; 
+                    }
+
+                </style>                    
+                <button class="button" onclick="window.location.href = ''; return false;"></button>
+                <div class="container">
+                    <img class="pokemon_image" src="${filename}" width="120" height="120">
+                </div>
+                <div class ="titlebar">                 
+                    <poke_name>${capitalizedName}</poke_name>
+                    <div class="chart">
+                        <canvas id="pokemonChart" class="chart" width="100" height="100">
+                    </div>  
+                </div>                    
+                <p>Popularity: ${pop}</p>
+                <div class ="description_box">
+                    <div class ="text_box">
+                        <desc>${desc}</desc>
                     </div>
-                    <div class ="titlebar">                 
-                        <poke_name>${capitalizedName}</poke_name>
-                    </div>                    
-                    <p>Popularity: ${pop}</p>
-                    <div class ="description_box">
-                        <div class ="text_box">
-                            <desc>${desc}</desc>
-                        </div>
-                    </div>
-                </body>
+                </div>              
+            </body>
+
             `;
             document.write(pokemonPageContent);
+            var ctx = document.getElementById('pokemonChart').getContext('2d');
+            var barChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Percent of Match', 
+                        borderColor: 'rgb(75, 192, 192)', 
+                        borderWidth: 2,
+                        data: datapts
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 50,
+                            min: 0,
+                            stepSize: 5
+                        }
+                    }
+                }
+            });
         }
-
         window.onload = function () {
+            let storedQuery = sessionStorage.getItem('query');
             let storedData = sessionStorage.getItem('pokemonData');
+            if (storedQuery) {
+                let old_query = JSON.parse(storedQuery);
+                let targetBox = document.getElementById("filter-text-val");
+                targetBox.value = old_query; // Set the value of the textarea to the stored query
+            }
+
             if (storedData) {
                 let data = JSON.parse(storedData);
                 let i = 1;
@@ -290,13 +344,16 @@
                     let targetBox = document.getElementById(targetBoxId);
                     if (targetBox) {
                         let tempDiv = document.createElement("div")
-                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop)
+                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop, row.top_terms)
                         targetBox.appendChild(tempDiv)
                         i += 1
                     }
                 });
             }
         }
+
+
+
 
         function favPokemonRanking(text, favPokemon) {
             console.log(text);
