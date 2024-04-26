@@ -63,10 +63,10 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
 
     pos_query = np.maximum(query_vec,0)
     
-    rf = df.iloc[ranks]
-    rf = rf['name','description','category','type','height','weight']
+    rf = df.iloc[ranks].reset_index(drop=True)
+    rf = rf[['name','description','category','type','height','weight']]
     rf['pop'] = -1
-    rf['top_terms'] = None
+    top_terms = []
     for i in range(k):
         idx = ranks[i]
         pos_doc = np.maximum(docs_normed[idx],0)
@@ -75,10 +75,12 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
         top_idx = np.argsort(-weights)[:6]
         top_weights = weights[top_idx]
         normed_weights = top_weights / top_weights.sum()
-        
+    
         top_words = [(index_to_word[x],normed_weights[k])for k,x in enumerate(top_idx)]
+        top_terms.append(top_words)
 
-        rf['top_terms'][i] = top_words        
+    
+    rf['top_terms'] = pd.Series(top_terms)
     return rf
 
 def fav_rank(df, query, vectorizer, words, docs_normed, data, fav_name):
