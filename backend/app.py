@@ -26,11 +26,15 @@ pokedex.rename(columns = {'description':'documents'},inplace=True)
 info = pd.read_csv("pokemon_information.csv")
 
 df =  pd.merge(info, pokedex, on='name', how='outer')
-df['documents'] = df.description + df.documents
+df['documents'] = df.description
+
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
 documents = df.documents.fillna('')
+
+
 td_matrix = vectorizer.fit_transform(documents)
+
 
 word_to_index = vectorizer.vocabulary_
 index_to_word = {i:t for t,i in word_to_index.items()}
@@ -50,11 +54,6 @@ def json_search(query):
     answer = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
     return answer.to_json(orient='records')
 
-def top_words_search(query):
-    k = 6
-    answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
-    return json.dumps(top_words, cls=NumpyArrayEncoder)
-
 def fav_poke_position(query, fav_name):
     rank = demo.fav_rank(df, query,vectorizer,words_compressed,docs_compressed_normed,df,fav_name)
     return jsonify(rank)
@@ -67,11 +66,6 @@ def home():
 def pokemon_search():
     text = request.args.get("title")
     return json_search(text)
-
-@app.route("/topwords")
-def pokemon_list():
-    text = request.args.get("title")
-    return jsonify(top_words_search(text))
 
 @app.route('/pokemonRanking', methods=['GET'])
 def pokemon_ranking():
