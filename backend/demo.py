@@ -51,30 +51,35 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
     """
     vectorizer is a tfidf sklearn vectorizer object, words is the words_compressed matrix, which is svd output transposed.
     docs_normed is first svd output normalized.
+
+    returns rf (result frame). rf has columns names 'name','description','category','type','height','weight', 'pop', 'top_terms'
+    top terms is a list of tuples, where the first is the word, second is the similarity score.
     """
     query_tfidf = vectorizer.transform([query]).toarray()
-    query_vec = normalize(np.dot(query_tfidf, words)).squeeze()
+    query_vec = normalize(np.dot(query_tfidf, words)).squeeze() 
     
     sims = docs_normed.dot(query_vec)
     ranks = np.argsort(-sims)[:k+1]
+
+    pos_query = np.maximum(query_vec,0)
     
-    ranked = []
-    for r in ranks:
-        name = data.name[r]
-        descs = ". ".join(set(data.description[r][:-1].split(". "))) + "."[:2]
-        #descs = data.description
-        pop = "This Pokémon is not in the top 70 percent of popular Pokémon"
-        if name.lower() in fav_pokemon:
-            pop = fav_pokemon[name.lower()]
-        ranked.append((name, descs, pop))
+    rf = df.iloc[ranks]
+    rf = rf['name','description','category','type','height','weight']
+    rf['pop'] = -1
+    rf['top_terms'] = None
+    for i in rf.index:
+        idx = ranks[i]
+        pos_doc = np.maximum(docs_normed[idx],0)
+        weights = np.dot(words,(pos_query * pos_doc))
         
-    asort = np.argsort(-query_vec)
-    top_traits = []
-    for x in asort[:5]:
-        dimension_col = np.argsort(-words[:,x].squeeze())[:3]
-        top_traits.append([index_to_word[i] for i in dimension_col])
+        top_idx = np.argsort(-weights)[:6]
+        top_weights = weights[top_idx]
+        normed_weights = top_weights / top_weights.sum()
         
-    return pd.DataFrame(data=ranked,columns=['name','desc', 'pop']),np.array(top_traits).flatten()
+        top_words = [(index_to_word[x],normed_weights[k])for k,x in enumerate(top_idx)]
+
+        rf['top_terms'][i] = top_words        
+    return rf
 
 def fav_rank(df, query, vectorizer, words, docs_normed, data, fav_name):
     """
