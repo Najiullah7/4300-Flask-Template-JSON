@@ -67,7 +67,7 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
     rf = rf['name','description','category','type','height','weight']
     rf['pop'] = -1
     rf['top_terms'] = None
-    for i in rf.index:
+    for i in range(k):
         idx = ranks[i]
         pos_doc = np.maximum(docs_normed[idx],0)
         weights = np.dot(words,(pos_query * pos_doc))
