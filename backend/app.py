@@ -20,15 +20,8 @@ class NumpyArrayEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
     
 # gets the data
-pokedex = pd.read_csv("pokematch.csv")
-pokedex.rename(columns = {'description':'documents'},inplace=True)
-
-info = pd.read_csv("pokemon_information.csv")
-info['name'] = info['name'].str.capitalize()
-
-df =  pd.merge(info, pokedex, on='name', how='outer')
-df['documents'] = df.description
-
+df = pd.read_csv('cleaned_pokemon_data.csv')
+df['name'] = df['name'].str.capitalize()
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
 documents = df.documents.fillna('')
