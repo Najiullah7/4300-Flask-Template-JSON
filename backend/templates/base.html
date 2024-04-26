@@ -66,23 +66,27 @@
 
         function answerBoxTemplate(pokemname, pokeDesc, pokepop, top_terms) {
             let filename = '/static/images/Pokemon_sprites_Gen1-8/' + pokemname.toLowerCase() + '.png';
+
             if (!pokeDesc && !pokepop) {
                 return `<div class="container" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
-                        <!-- Image to hover over -->
-                        <img class="trigger-image" src="/static/images/pokemon_background.png">
+                            <!-- Image to hover over -->
+                            <img class="trigger-image" src="/static/images/pokemon_background.png">
 
-                        <!-- Image to fade into -->
-                        <img class="fade-image" src="/static/images/selected_pokemon_background.png">
+                            <!-- Image to fade into -->
+                            <img class="fade-image" src="/static/images/selected_pokemon_background.png">
 
-                        <!-- Image to move down -->
-                        <img class="move-image" src="/static/images/Pokeball_top_unselected.png">
+                            <!-- Image to move down -->
+                            <img class="move-image" src="/static/images/Pokeball_top_unselected.png">
 
-                        <img class="pokemon_sprite" src="${filename}">
-                        <text class="pokemon_name">${pokemname}</text>
-                    </div>`;
-
+                            <img class="pokemon_sprite" src="${filename}">
+                            <text class="pokemon_name">${pokemname}</text>
+                        </div>`;
             }
-            return `<div class="container" onclick="generatePokemonPage(&quot;${pokemname}&quot;, &quot;${pokeDesc}&quot;, &quot;${pokepop}&quot;, &quot;${top_terms}&quot;)" onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
+
+            // Store pokeDesc in a data attribute
+            let dataAttributes = `data-pokemname="${pokemname}" data-pokeDesc="${pokeDesc}" data-pokepop="${pokepop}" data-top_terms="${top_terms}"`;
+
+            return `<div class="container" onclick="handlePokemonClick(this)" ${dataAttributes} onmouseenter="handleMouseEnter(this)" onmouseleave="handleMouseLeave(this)">
                         <!-- Image to hover over -->
                         <img class="trigger-image" src="/static/images/pokemon_background.png">
 
@@ -96,6 +100,19 @@
                         <text class="pokemon_name">${pokemname}</text>
                     </div>`;
         }
+
+        // Define a function to handle the click event
+        function handlePokemonClick(element) {
+            // Retrieve data from data attributes
+            let pokemname = element.getAttribute('data-pokemname');
+            let pokeDesc = element.getAttribute('data-pokeDesc');
+            let pokepop = element.getAttribute('data-pokepop');
+            let top_terms = element.getAttribute('data-top_terms');
+
+            // Perform actions with the retrieved data
+            generatePokemonPage(pokemname, pokeDesc, pokepop, top_terms);
+        }
+
 
         function handleMouseEnter(element) {
             const fadeImage = element.querySelector('.fade-image');
@@ -127,6 +144,8 @@
         }
 
         function filterText() {
+            console.log("---------------------");
+            console.log("In filterText");
             let i = 1;
             console.log(document.getElementById("filter-text-val").value)
             sessionStorage.setItem('query', JSON.stringify(document.getElementById("filter-text-val").value));
@@ -140,11 +159,7 @@
                         if (targetBox) {
                             targetBox.innerHTML = ""
                             let tempDiv = document.createElement("div")
-                            // let top_terms = ""
-                            // for(const tup of row.top_terms){
-                            //     top_terms.concat(top_terms, tup[0], ",", tup[1], "|")
-                            // }
-                            tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop, row.top_terms)
+                            tempDiv.innerHTML = answerBoxTemplate(row.name, row.description, row.pop, row.top_terms)
                             targetBox.appendChild(tempDiv)
                             i += 1
                         }
@@ -153,14 +168,14 @@
         }
 
         function generatePokemonPage(name, desc, pop, top_terms_scores) {
+
+            
             let capitalizedName = name.toUpperCase();
             let filename = '/static/images/PokemonImages/' + name.toLowerCase() + '.png';
 
-            console.log(top_terms_scores)
 
             let word_list = top_terms_scores.split(",")
 
-            console.log(word_list)
 
 
             var labels = []
@@ -174,8 +189,12 @@
                 datapts.push(word_list[i + 1] * 100)
             }     
 
-            console.log(datapts)
-
+            console.log("--------------")
+            let not_pop = "This Pokémon is not in the top 70 percent of popular Pokémon"
+            let poptrophy = "{{ url_for('static', filename='popularTrophy.png') }}"
+            if(pop.localeCompare(not_pop) == 0){
+                poptrophy = ""
+            }
             const pokemonPageContent = `
             <body>
                 <style>
@@ -275,11 +294,32 @@
                         background-size: cover;
                     }
 
-                    .chart{
-                        transform: translateX(50%); 
-                        transform: translateY(26%); 
-                        width: 300px; 
-                        height: 300px; 
+                    .chart-container {
+                        position: absolute;
+                        top: 22%;
+                        left: 40%;
+                        transform: translate(-50%, -50%);
+                        z-index: 1; /* Ensure the chart is above other elements */
+                    }
+                    .chart {
+                        width: 500px; /* Adjust width as needed */
+                        height: 500px; /* Adjust height as needed */
+                    }
+
+                    .popscore {
+                        position: absolute;
+                        top: 170px; /* Adjust as needed */
+                        left: 230px; /* Adjust as needed */
+                        /* Additional styling */
+                        font-size: 20px; /* Increased font size */
+                        font-weight: bold;
+                    }
+
+                    .popimg {
+                        position: absolute;
+                        top: 40px; /* Adjust as needed */
+                        right: 160px; /* Adjust as needed */
+                        /* Additional styling */
                     }
 
                 </style>                    
@@ -287,16 +327,17 @@
                 <div class="container">
                     <img class="pokemon_image" src="${filename}" width="120" height="120">
                 </div>
+                <div class="chart-container">
+                    <canvas id="pokemonChart" class="chart" width="415" height="415"></canvas>
+                </div>
                 <div class ="titlebar">                 
                     <poke_name>${capitalizedName}</poke_name>
-                    <div class="chart">
-                        <canvas id="pokemonChart" class="chart" width="100" height="100">
-                    </div>  
+                    <img class = "popimg" src="${poptrophy}" />
+                    <p class = "popscore">${pop}</p>
                 </div>                    
-                <p>Popularity: ${pop}</p>
                 <div class ="description_box">
                     <div class ="text_box">
-                        <desc>${desc}</desc>
+                        <p>${desc}</p>
                     </div>
                 </div>              
             </body>
@@ -321,7 +362,7 @@
                             beginAtZero: true,
                             max: 50,
                             min: 0,
-                            stepSize: 5
+                            stepSize: 5,
                         }
                     }
                 }
@@ -344,7 +385,7 @@
                     let targetBox = document.getElementById(targetBoxId);
                     if (targetBox) {
                         let tempDiv = document.createElement("div")
-                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.desc, row.pop, row.top_terms)
+                        tempDiv.innerHTML = answerBoxTemplate(row.name, row.description, row.pop, row.top_terms)
                         targetBox.appendChild(tempDiv)
                         i += 1
                     }
@@ -387,7 +428,7 @@
                         ul.style.padding = '0'; // Remove default padding
                         data.forEach(pokemon => {
                             const li = document.createElement('li');
-                            li.innerHTML = answerBoxTemplate(pokemon, null, null)
+                            li.innerHTML = answerBoxTemplate(pokemon, null, null, null)
                             li.onclick = () => {
                                 document.getElementById('pokemon-search').value = pokemon; // Set input value to clicked suggestion
                                 suggestionsContainer.innerHTML = ''; // Clear suggestions after selection
