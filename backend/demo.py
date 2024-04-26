@@ -59,7 +59,7 @@ def svd_top_k(df, query, vectorizer, words, docs_normed, data, index_to_word, k 
     query_vec = normalize(np.dot(query_tfidf, words)).squeeze() 
     
     sims = docs_normed.dot(query_vec)
-    ranks = np.argsort(-sims)[:k+1]
+    ranks = np.argsort(-sims)[:k]
 
     pos_query = np.maximum(query_vec,0)
     
