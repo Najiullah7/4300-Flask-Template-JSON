@@ -125,9 +125,13 @@ h1 {
 .boxcontainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-    /* Adjust the gap between the boxes */
-    padding: 20px;
+    grid-gap: 0px;
+    background-image: url('selection_background.png'); /* Add your background image path here */
+    background-size: cover; /* Adjust background size as needed */
+    background-position: center; /* Adjust background position as needed */
+    width: 50%;
+    min-height: 620px; /* Set minimum height to ensure the entire background image is visible */
+    justify-content: flex-start;
 }
 
 .suggestcontainer {
@@ -141,7 +145,6 @@ h1 {
 .box {
     background-color: transparent;
     /* Set background to transparent */
-    padding: 20px;
     text-align: center;
     overflow: auto;
     width: 100%;
@@ -163,7 +166,7 @@ h1 {
 /* Style for the container and images */
 .container {
     position: relative;
-    width: 275px;
+    width: 350px;
     height: 100px;
     padding: 20px;
     /* Adjust container width as needed */
@@ -171,6 +174,7 @@ h1 {
     /* Arrange containers side by side */
     margin-right: 20px;
     /* Add some spacing between containers */
+    transform: translateX(24%); 
 }
 
 .trigger-image {
@@ -178,6 +182,8 @@ h1 {
     top: 10;
     left: 0;
     transition: opacity 0.3s ease;
+    overflow: hidden; 
+
     /* Smooth transition for opacity */
 }
 
@@ -187,6 +193,8 @@ h1 {
     left: 0;
     opacity: 0;
     transition: opacity 0.3s ease;
+    overflow: hidden; 
+
     /* Smooth transition for opacity */
 }
 
@@ -196,6 +204,8 @@ h1 {
     /* Initial position */
     left: 5px;
     transition: top 0.3s ease;
+    overflow: hidden; 
+
     /* Smooth transition for vertical movement */
 }
 
