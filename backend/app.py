@@ -20,11 +20,16 @@ class NumpyArrayEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
     
 # gets the data
-df = pd.read_csv("pokematch.csv")
-#df = pd.read_csv("pokemon_information.csv")
+pokedex = pd.read_csv("pokematch.csv")
+pokedex.rename(columns = {'description':'documents'},inplace=True)
 
-vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8)
-documents = df.description
+info = pd.read_csv("pokemon_information.csv")
+
+df =  pd.merge(info, pokedex, on='name', how='outer')
+df['documents'] = df.description + df.documents
+
+vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
+documents = df.documents
 td_matrix = vectorizer.fit_transform(documents)
 
 word_to_index = vectorizer.vocabulary_
@@ -48,7 +53,7 @@ CORS(app)
 
 def json_search(query):
     k = 6
-    answer, top_words = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
+    answer = demo.svd_top_k(df, query,vectorizer,words_compressed,docs_compressed_normed,df,index_to_word,k)
     return answer.to_json(orient='records')
 
 def top_words_search(query):
