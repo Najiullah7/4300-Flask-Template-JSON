@@ -29,7 +29,7 @@ df =  pd.merge(info, pokedex, on='name', how='outer')
 df['documents'] = df.description + df.documents
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
-documents = df.documents
+documents = df.documents.fillna('')
 td_matrix = vectorizer.fit_transform(documents)
 
 word_to_index = vectorizer.vocabulary_
