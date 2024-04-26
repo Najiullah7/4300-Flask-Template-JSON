@@ -24,11 +24,10 @@ pokedex = pd.read_csv("pokematch.csv")
 pokedex.rename(columns = {'description':'documents'},inplace=True)
 
 info = pd.read_csv("pokemon_information.csv")
+info['name'] = info['name'].str.capitalize()
 
 df =  pd.merge(info, pokedex, on='name', how='outer')
-df.documents.fillna('',inplace=True)
-df.description.fillna('',inplace=True)
-df['documents'] = df['description'] + df['documents']
+df['documents'] = df.description
 
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
