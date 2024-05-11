@@ -20,8 +20,15 @@ class NumpyArrayEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
     
 # gets the data
-df = pd.read_csv('cleaned_pokemon_data.csv')
-df['name'] = df['name'].str.capitalize()
+pokedex = pd.read_csv("pokematch.csv")
+pokedex.rename(columns = {'description':'documents'},inplace=True)
+
+info = pd.read_csv("pokemon_information.csv")
+info['name'] = info['name'].str.capitalize()
+
+df =  pd.merge(info, pokedex, on='name', how='outer')
+df['documents'] = df.description
+
 
 vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8, ngram_range=(1,2))
 documents = df.documents.fillna('')
@@ -34,7 +41,7 @@ word_to_index = vectorizer.vocabulary_
 index_to_word = {i:t for t,i in word_to_index.items()}
 feature_names = vectorizer.get_feature_names_out()
 
-docs_compressed, s, words_compressed = svds(td_matrix, k=40)
+docs_compressed, s, words_compressed = svds(td_matrix, k=60)
 docs_compressed_normed = normalize(docs_compressed)
 
 words_compressed = words_compressed.transpose()

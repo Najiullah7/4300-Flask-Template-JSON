@@ -12,7 +12,7 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Pokefont";
     background-color: #f5f5f5;
     color: #333;
     padding: 20px;
@@ -28,25 +28,45 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    padding: 0;
+    /* Set the path to your GIF */
+    background-size: cover;
+    /* Cover the entire viewport */
+    background-repeat: no-repeat;
+    /* Prevent the background from repeating */
+    background-attachment: fixed;
+    /* Keep the background fixed while scrolling */
 }
+
 
 .full-body-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 20px;
     border-radius: 8px;
+    margin-top: 10px;
     width: 80%;
     max-width: 700px;
 }
 
 .top-text {
     text-align: center;
-    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.top-text img {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    height: 100px;
 }
 
 /* ----------- input box ------------ */
 .input-box {
     display: flex;
+    font-family: "Pokefont";
+    font-size: 40px;
     align-items: center;
     gap: 10px;
 }
@@ -61,7 +81,7 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Pokefont";
 }
 
 .input-box button {
@@ -121,20 +141,46 @@ h1 {
     color: #4285F4;
 }
 
+#submit-button {
+    /* Set initial size and other styles */
+    width: 77px;
+    /* Original width */
+    height: 68px;
+    background-color: transparent;
+    /* Original height */
+    /* Set default background image */
+    background-image: url('/static/images/detective_p.png');
+    /* Set background image size to cover the entire button */
+    background-size: cover;
+    /* Set transition for smooth effect */
+    transition: background-image 0.5s ease-in-out;
+    /* Define the hover effect */
+    cursor: pointer;
+}
+
+/* Adjust background image when hovering over the button */
+#submit-button:hover {
+    /* Change the background image on hover */
+    background-image: url('/static/images/detective_p_selected.png');
+}
+
 
 .boxcontainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 0px;
-    background-image: url('selection_background.png'); /* Add your background image path here */
-    background-size: cover; /* Adjust background size as needed */
-    background-position: center; /* Adjust background position as needed */
+    background-size: cover;
+    /* Adjust background size as needed */
+    background-position: center;
+    /* Adjust background position as needed */
     width: 50%;
-    min-height: 620px; /* Set minimum height to ensure the entire background image is visible */
+    min-height: 350px;
+    /* Set minimum height to ensure the entire background image is visible */
     justify-content: flex-start;
 }
 
 .suggestcontainer {
+    font-size: 25px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
@@ -166,7 +212,7 @@ h1 {
 /* Style for the container and images */
 .container {
     position: relative;
-    width: 350px;
+    width: 280px;
     height: 100px;
     padding: 20px;
     /* Adjust container width as needed */
@@ -174,7 +220,7 @@ h1 {
     /* Arrange containers side by side */
     margin-right: 20px;
     /* Add some spacing between containers */
-    transform: translateX(24%); 
+    transform: translateX(24%);
 }
 
 .trigger-image {
@@ -182,7 +228,7 @@ h1 {
     top: 10;
     left: 0;
     transition: opacity 0.3s ease;
-    overflow: hidden; 
+    overflow: hidden;
 
     /* Smooth transition for opacity */
 }
@@ -193,7 +239,7 @@ h1 {
     left: 0;
     opacity: 0;
     transition: opacity 0.3s ease;
-    overflow: hidden; 
+    overflow: hidden;
 
     /* Smooth transition for opacity */
 }
@@ -204,7 +250,7 @@ h1 {
     /* Initial position */
     left: 5px;
     transition: top 0.3s ease;
-    overflow: hidden; 
+    overflow: hidden;
 
     /* Smooth transition for vertical movement */
 }
