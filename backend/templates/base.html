@@ -33,12 +33,12 @@
             <button id="submit-button" onclick="submitSearch()"></button>
         </div>
         <!-- Separate input for Pokémon search suggestions -->
-        <div class="pokemon-search" style="font-family: 'Pokefont'; font-size: 20px; height: 200px">
+        <div class="pokemon-search" style="font-family: 'Pokefont'; font-size: 20px; height: 150px">
             Pick Your Favorite Pokemon To See How Similar It Is
             <input type="text" id="pokemon-search" oninput="updatePokemonSuggestions(this.value)"
                 placeholder="Search Pokémon" style="font-family: 'Pokefont'; font-size: 20px;">
             <!-- Suggestions container -->
-            <div class="suggestcontainer" id="pokemon-suggestions" style="height: 150px; top: -10px; overflow-y: auto;">
+            <div class="suggestcontainer" id="pokemon-suggestions" style="height: 100px; top: -10px; overflow-y: auto;">
 
             </div>
             <div id="favresult" style="font-size: 30px">
@@ -54,27 +54,35 @@
         <div id="box6" class="box"></div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        window.addEventListener("load", function () {
             // Retrieve the background image and background set flag from session storage
             var backgroundImage = sessionStorage.getItem('backgroundImage');
             var backgroundSet = sessionStorage.getItem('backgroundSet');
 
+            console.log("Background Image:", backgroundImage);
+            console.log("Background Set:", backgroundSet);
+
             // Check if the background has been set and a background image is stored
             if (backgroundSet && backgroundImage) {
                 // If background is already set, use the stored background image
+                console.log("Using stored background image:", backgroundImage);
                 var body = document.body;
                 body.style.backgroundImage = "url('" + backgroundImage + "')";
             } else {
+                // Generate a random background image
+                console.log("Generating random background image...");
                 var randomNumber = Math.floor(Math.random() * 5 + 1);
                 var body = document.body;
                 backgroundImage = "/static/backgrounds/background" + randomNumber + ".gif";
                 body.style.backgroundImage = "url('" + backgroundImage + "')";
 
                 // Set the background set flag and store the background image in session storage
+                console.log("Setting background set flag and storing background image:", backgroundImage);
                 sessionStorage.setItem('backgroundSet', 'true');
                 sessionStorage.setItem('backgroundImage', backgroundImage);
             }
         });
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
@@ -317,6 +325,20 @@
                         text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
                     }
 
+                    .poke_info {
+                        font-family: 'Pokefont';
+                        font-size: 60px;
+                        font-weight: 400;
+                        position: absolute;
+                        top: 250px; /* Adjust the top position as needed */
+                        left: 1000px; /* Adjust the left position as needed */
+                        color: #606060ff;
+                        letter-spacing: 2px;
+                        display: block;
+                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
+                        padding-top: 20px;
+                    }
+
                     desc {
                         font-family: 'Pokefont';
                         font-size: 40px;
@@ -405,9 +427,8 @@
             <div class ="titlebar">                 
                 <poke_name>${capitalizedName}</poke_name>
                 <poke_category>${category}</poke_category>  
-                
-            </div>                    
-          
+            </div>
+
             <div class ="description_box">
                 <div class ="text_box">
                     <desc>${desc}</p>
@@ -415,6 +436,8 @@
             </div>                
             <img class="poke_type1" src="${type1}"">
             <img class="poke_type2" src="${type2}"">
+            <div class="poke_info">HT &nbsp;&nbsp;&nbsp;&nbsp;${height}</div>
+            <div class="poke_info" style="top: 290px;">WT &nbsp;&nbsp;&nbsp;&nbsp;${weight} lbs.</div>
 
         </body>
 
