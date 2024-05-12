@@ -41,7 +41,7 @@ word_to_index = vectorizer.vocabulary_
 index_to_word = {i:t for t,i in word_to_index.items()}
 feature_names = vectorizer.get_feature_names_out()
 
-docs_compressed, s, words_compressed = svds(td_matrix, k=60)
+docs_compressed, s, words_compressed = svds(td_matrix, k=30)
 docs_compressed_normed = normalize(docs_compressed)
 
 words_compressed = words_compressed.transpose()

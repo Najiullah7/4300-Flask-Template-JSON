@@ -480,8 +480,9 @@
                         font-family: 'Pokefont';
                         font-size: 60px;
                         position: absolute;
-                        top: 280px;
-                        left: 1000px;
+                        top: 100px;
+                        left: 350px;
+                        width: 500px;
                         color: #3e3e3e;
                         letter-spacing: 2px;
                         display: block;
@@ -507,7 +508,12 @@
             <div class="chart-container">
                 <canvas id="pokemonChart" class="chart" width="175" height="175"></canvas>
                 <img class="background-image" src="/static/images/term_match_frame.png" alt="Background Image">
+                <div class="height_weight_container">
+                    <span class="height_label">HT</span>${height}<br>
+                    <span class="weight_label">WT</span>${weight} lbs.
+                </div>
             </div>
+
             <div class ="titlebar">                 
                 <poke_name>${capitalizedName}</poke_name>
                 <poke_category>${category}</poke_category>  
@@ -521,10 +527,7 @@
             </div>                
             <img class="poke_type1" src="${type1}"">
             <img class="poke_type2" src="${type2}"">
-            <div class="height_weight_container">
-                <span class="height_label">HT</span>${height}<br>
-                <span class="weight_label">WT</span>${weight} lbs.
-            </div>
+            
 
             ${popDisplayStyle}
 
