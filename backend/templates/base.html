@@ -28,17 +28,19 @@
         </div>
         <div class="input-box">
             <textarea placeholder="Enter a description about yourself" id="filter-text-val"
-                style="font-size: 20px;"></textarea>
+                style="font-size: 20px; resize: none;"></textarea>
 
             <button id="submit-button" onclick="submitSearch()"></button>
         </div>
         <!-- Separate input for Pokémon search suggestions -->
-        <div class="pokemon-search" style="font-family: 'Pokefont'; font-size: 20px; height: 150px">
-            Pick Your Favorite Pokemon To See How Similar It Is
+        <div class="pokemon-search" style="font-family: 'Pokefont'; font-size: 20px; height: 170px; padding-top: 10px">
+            <span style="padding-left: 4px; font-weight: 700">Pick Your Favorite Pokemon To See How Similar It Is</span>
             <input type="text" id="pokemon-search" oninput="updatePokemonSuggestions(this.value)"
-                placeholder="Search Pokémon" style="font-family: 'Pokefont'; font-size: 20px;">
+                placeholder="Search Pokémon"
+                style="font-family: 'Pokefont'; font-size: 20px; height: 25px; width: 242px;">
             <!-- Suggestions container -->
-            <div class="suggestcontainer" id="pokemon-suggestions" style="height: 100px; top: -10px; overflow-y: auto;">
+            <div class="suggestcontainer" id="pokemon-suggestions"
+                style="height: 120px; padding-top: -20px; overflow-y: auto;">
 
             </div>
             <div id="favresult" style="font-size: 30px">
@@ -54,35 +56,27 @@
         <div id="box6" class="box"></div>
     </div>
     <script>
-        window.addEventListener("load", function () {
+        document.addEventListener("DOMContentLoaded", function () {
             // Retrieve the background image and background set flag from session storage
             var backgroundImage = sessionStorage.getItem('backgroundImage');
             var backgroundSet = sessionStorage.getItem('backgroundSet');
 
-            console.log("Background Image:", backgroundImage);
-            console.log("Background Set:", backgroundSet);
-
             // Check if the background has been set and a background image is stored
             if (backgroundSet && backgroundImage) {
                 // If background is already set, use the stored background image
-                console.log("Using stored background image:", backgroundImage);
                 var body = document.body;
                 body.style.backgroundImage = "url('" + backgroundImage + "')";
             } else {
-                // Generate a random background image
-                console.log("Generating random background image...");
                 var randomNumber = Math.floor(Math.random() * 5 + 1);
                 var body = document.body;
                 backgroundImage = "/static/backgrounds/background" + randomNumber + ".gif";
                 body.style.backgroundImage = "url('" + backgroundImage + "')";
 
                 // Set the background set flag and store the background image in session storage
-                console.log("Setting background set flag and storing background image:", backgroundImage);
                 sessionStorage.setItem('backgroundSet', 'true');
                 sessionStorage.setItem('backgroundImage', backgroundImage);
             }
         });
-
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
@@ -202,15 +196,12 @@
         }
 
         function generatePokemonPage(name, desc, pop, top_terms_scores, category, type, height, weight) {
-
-
             let capitalizedName = name.toUpperCase();
             let filename = '/static/images/PokemonImages/' + name.toLowerCase() + '.png';
 
+            let word_list = top_terms_scores.split(",");
 
-            let word_list = top_terms_scores.split(",")
-
-            let types = type.split(",")
+            let types = type.split(",");
             type1 = '/static/images/Type_Images/' + types[0][0].toUpperCase() + types[0].substring(1) + '.png';
             type2 = '';
             if (types.length > 1) {
@@ -221,19 +212,66 @@
             var datapts = []
 
             for (let i = 0; i < word_list.length - 1; i += 2) {
-                // Do something at index i
-                labels.push(word_list[i])
-
-                // Do something else at index i + 1
-                datapts.push(word_list[i + 1] * 100)
+                labels.push(word_list[i]);
+                datapts.push(word_list[i + 1] * 100);
             }
 
+            let popNumber = parseInt(pop.match(/\d+/)[0]);
+            let popImage = '';
 
-            console.log("--------------")
-            let not_pop = "This Pokémon is not in the top 70 percent of popular Pokémon"
-            let poptrophy = "{{ url_for('static', filename='popularTrophy.png') }}"
-            if (pop.localeCompare(not_pop) == 0) {
-                poptrophy = ""
+            if (pop == "This Pokémon is not in the top 70 percent of popular Pokémon") {
+                popImage = '<img src="/static/images/sad_p.png" style="transform: scale(0.25);">';
+                pop = "This Pokémon is not in the top <Br> 70 percent of popular Pokémon"
+            }
+
+            else {
+                if (popNumber <= 100) {
+                    popImage = '<img src="/static/images/gold_metal.png">';
+                } else if (popNumber <= 300) {
+                    popImage = '<img src="/static/images/silver_metal.png">';
+                } else if (popNumber <= 700) {
+                    popImage = '<img src="/static/images/bronze_medal.png">';
+                } else {
+                    popImage = '<img src="/static/images/sad_p.png">';
+                }
+            }
+
+            let popDisplayStyle = '';
+            if (popImage.includes('sad_p')) {
+                popDisplayStyle = `
+                    <div style="
+                        position: absolute; 
+                        top: -60px; 
+                        left: 175px; 
+                        display: flex; 
+                        align-items: center; 
+                        font-family: 'Pokefont'; 
+                        font-size: 35px;
+                        color: #3e3e3e;
+                        letter-spacing: 2px;
+                        font-weight: 900;
+                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
+                        z:0">
+                        ${popImage}
+                        <div style="margin-left: -120px;">${pop}</div>
+                    </div>`;
+            } else {
+                popDisplayStyle = `
+                    <div style="
+                        position: absolute; 
+                        top: 30px; 
+                        left: 325px; 
+                        display: flex; 
+                        align-items: center; 
+                        font-family: 'Pokefont'; 
+                        font-size: 50px;
+                        color: #3e3e3e;
+                        letter-spacing: 2px;
+                        font-weight: 900;
+                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);">
+                        ${popImage}
+                        Popularity: ${pop}
+                    </div>`;
             }
 
             const pokemonPageContent = `
@@ -292,6 +330,7 @@
                         height: 80%;
                         object-fit: cover;
                     }
+                    
                     poke_name {
                         font-family: 'Pokefont';
                         font-size: 50px;
@@ -323,20 +362,6 @@
                         letter-spacing: 2px;
                         display: block;
                         text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
-                    }
-
-                    .poke_info {
-                        font-family: 'Pokefont';
-                        font-size: 60px;
-                        font-weight: 400;
-                        position: absolute;
-                        top: 250px; /* Adjust the top position as needed */
-                        left: 1000px; /* Adjust the left position as needed */
-                        color: #606060ff;
-                        letter-spacing: 2px;
-                        display: block;
-                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
-                        padding-top: 20px;
                     }
 
                     desc {
@@ -413,6 +438,27 @@
                         top: 190px; /* Adjust as needed */
                         right: 10px; /* Adjust as needed */
                     }
+                    .height_weight_container {
+                        font-family: 'Pokefont';
+                        font-size: 60px;
+                        position: absolute;
+                        top: 280px;
+                        left: 1000px;
+                        color: #3e3e3e;
+                        letter-spacing: 2px;
+                        display: block;
+                        text-shadow: -1.5px -1.5px 0px rgba(0, 0, 0, 0.25);
+                    }
+
+                    .height_label {
+                        display: inline-block;
+                        width: 115px; /* Adjust as needed */
+                    }
+
+                    .weight_label {
+                        display: inline-block;
+                        width: 115px; /* Adjust as needed */
+                    }
 
             </style>
                 
@@ -427,8 +473,9 @@
             <div class ="titlebar">                 
                 <poke_name>${capitalizedName}</poke_name>
                 <poke_category>${category}</poke_category>  
-            </div>
-
+                
+            </div>                    
+          
             <div class ="description_box">
                 <div class ="text_box">
                     <desc>${desc}</p>
@@ -436,8 +483,13 @@
             </div>                
             <img class="poke_type1" src="${type1}"">
             <img class="poke_type2" src="${type2}"">
-            <div class="poke_info">HT &nbsp;&nbsp;&nbsp;&nbsp;${height}</div>
-            <div class="poke_info" style="top: 290px;">WT &nbsp;&nbsp;&nbsp;&nbsp;${weight} lbs.</div>
+            <div class="height_weight_container">
+                <span class="height_label">HT</span>${height}<br>
+                <span class="weight_label">WT</span>${weight} lbs.
+            </div>
+
+            ${popDisplayStyle}
+
 
         </body>
 
@@ -580,12 +632,6 @@
             suggestionsContainer.innerHTML = '';
             suggestionsContainer.appendChild(suggestionsList);
         }
-
-
-
-
-
-
     </script>
 </body>
 

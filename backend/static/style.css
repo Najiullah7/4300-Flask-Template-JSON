@@ -153,7 +153,7 @@ h1 {
     /* Set background image size to cover the entire button */
     background-size: cover;
     /* Set transition for smooth effect */
-    transition: background-image 0.5s ease-in-out;
+    transition: background-image 0.3s ease-in-out;
     /* Define the hover effect */
     cursor: pointer;
 }
@@ -174,9 +174,12 @@ h1 {
     background-position: center;
     /* Adjust background position as needed */
     width: 50%;
-    min-height: 350px;
+    min-height: 400px;
+    border-radius: 20px;
+    /* Rounded corners */
     /* Set minimum height to ensure the entire background image is visible */
-    justify-content: flex-start;
+    justify-content: center;
+    left: -20px;
 }
 
 .suggestcontainer {
