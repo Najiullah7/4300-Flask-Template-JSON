@@ -168,6 +168,7 @@ h1 {
 .boxcontainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    padding-top: 20px;
     grid-gap: 0px;
     background-size: cover;
     /* Adjust background size as needed */
@@ -273,4 +274,123 @@ h1 {
     font-size: 25px;
     font-family: "Pokefont";
     letter-spacing: 2px;
+}
+
+.card1 {
+    border-radius: 10px;
+    background: url(scorbunny.png);
+    width: 200px;
+    height: 280px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    margin: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-size: cover;
+}
+
+.card2 {
+    border-radius: 10px;
+    background: url(gengar.png);
+    width: 200px;
+    height: 280px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    margin: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-size: cover;
+}
+
+.card3 {
+    border-radius: 10px;
+    background: url(slowking.jpg);
+    width: 200px;
+    height: 280px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    margin: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-size: cover;
+}
+
+.card4 {
+    border-radius: 10px;
+    background: url(mr_mime.png);
+    width: 200px;
+    height: 280px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    margin: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-size: cover;
+}
+
+.card5 {
+    border-radius: 10px;
+    background: url(guzzlord.png);
+    width: 200px;
+    height: 280px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+    margin: 30px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-size: cover;
+}
+
+.rgb::after {
+    content: "";
+    background: linear-gradient(45deg,
+            #ff0000 0%,
+            #ff9a00 10%,
+            #d0de21 20%,
+            #4fdc4a 30%,
+            #3fdad8 40%,
+            #2fc9e2 50%,
+            #1c7fee 60%,
+            #5f15f2 70%,
+            #ba0cf8 80%,
+            #fb07d9 90%,
+            #ff0000 100%) repeat 0% 0% / 300% 100%;
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    filter: blur(8px);
+    transform: translateZ(-1px);
+    /*or z-index */
+    animation: rgb 6s linear infinite;
+}
+
+.card-container {
+    padding-top: 100px;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-container>div {
+    margin: 0 50px;
+    /* Adjust the margin as needed */
+}
+
+@keyframes rgb {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.js-tilt-glare {
+    border-radius: 18px;
 }

@@ -55,6 +55,43 @@
         <div id="box5" class="box"></div>
         <div id="box6" class="box"></div>
     </div>
+
+    <div class="card-container">
+        <div class="card1 rgb"></div>
+        <div class="card3 rgb"></div>
+        <div class="card2 rgb"></div>
+        <div class="card4 rgb"></div>
+        <div class="card5 rgb"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+    <script>
+        VanillaTilt.init(document.querySelectorAll(".card1"), {
+            glare: true,
+            reverse: true,
+            "max-glare": 0.15
+        });
+        VanillaTilt.init(document.querySelectorAll(".card2"), {
+            glare: true,
+            reverse: true,
+            "max-glare": 0.15
+        });
+        VanillaTilt.init(document.querySelectorAll(".card3"), {
+            glare: true,
+            reverse: true,
+            "max-glare": 0.15
+        });
+        VanillaTilt.init(document.querySelectorAll(".card4"), {
+            glare: true,
+            reverse: true,
+            "max-glare": 0.15
+        });
+        VanillaTilt.init(document.querySelectorAll(".card5"), {
+            glare: true,
+            reverse: true,
+            "max-glare": 0.15
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Retrieve the background image and background set flag from session storage
@@ -77,6 +114,7 @@
                 sessionStorage.setItem('backgroundImage', backgroundImage);
             }
         });
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
